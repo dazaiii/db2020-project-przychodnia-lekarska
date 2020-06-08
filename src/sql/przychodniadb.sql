@@ -287,3 +287,8 @@ ALTER TABLE `wizyta`
   ADD CONSTRAINT `wizyta_ibfk_3` FOREIGN KEY (`ID_pracownika`) REFERENCES `pracownik` (`ID_pracownika`);
 COMMIT;
 
+/* Uzytkownicy */
+
+DROP USER IF EXISTS przychodniadb@localhost;
+CREATE USER przychodniadb@localhost IDENTIFIED BY 'Zaq12wsx';
+GRANT ALL PRIVILEGES ON przychodniadb.* TO przychodniadb@localhost;
