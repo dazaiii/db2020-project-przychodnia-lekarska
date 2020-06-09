@@ -111,3 +111,46 @@ elif opcja == 5:
         imie_lekarza = input('Podaj imię lekarza: ')
         nazwisko_lekarza = input('Podaj nazwisko lekarza: ')
         functions.godziny_przyjec_lekarza(imie_lekarza, nazwisko_lekarza)
+
+
+#Dodaj osobę do bazy
+elif opcja == 6:
+    print('Kogo chcesz dodać?')
+    print('1. Pacjenta')
+    print('2. Pracownika')
+    wybor = int(input('Wybierz opcję 1 lub 2: '))
+
+    imie = input('Podaj imię: ')
+    nazwisko = input('Podaj nazwisko: ')
+    pesel = input('Podaj pesel: ')
+    telefon = input('Podaj telefon: ')
+    mail = input('Podaj mail: ')
+    miejsce_zamieszkania = input('Podaj miejsce zamieszkania: ')
+    data_urodzenia = input('Podaj datę urodzenia w formacie RRRR-MM-DD: ')
+
+    if wybor == 1:
+        id_pacjenta = functions.id_osoby('Pacjent')
+        print(id_pacjenta)
+        ubezpiecznie = str(input('Czy pacjent jest ubezpieczony? Tak/Nie: '))
+        if ubezpiecznie == 'Tak':
+            functions.dodaj_pacjenta(id_pacjenta,imie, nazwisko, data_urodzenia, pesel, miejsce_zamieszkania, telefon, mail,1)
+        else:
+            functions.dodaj_pacjenta(id_pacjenta,imie, nazwisko, data_urodzenia, pesel, miejsce_zamieszkania, telefon, mail,0)
+
+    if wybor == 2:
+        id_pracownika = functions.id_osoby('Pracownik')
+        print('Kogo chcesz dodać: ')
+        print('1. Lekarza')
+        print('2. Pielęgniarkę')
+        print('3. Recepcjonistkę')
+        wybor2 = int(input('Wybierz opcję 1, 2 lub 3: '))
+        if wybor2 == 1:
+            functions.dodaj_pracownika(id_pracownika,imie,nazwisko,data_urodzenia,pesel,miejsce_zamieszkania,telefon,mail,'Lekarz')
+            specjalizacja = input('Określ specjalizację lekarza: ')
+            etat = input('Na jaki etat przyjąć lekarza: ')
+            staz = input('Podaj staż pracy lekarza: ')
+            functions.dodaj_lekarza(id_pracownika,specjalizacja,staz,etat)
+        elif wybor2 == 2:
+            functions.dodaj_pracownika(id_pracownika, imie, nazwisko, data_urodzenia, pesel, miejsce_zamieszkania, telefon, mail, 'Pielęgniarka')
+        else:
+            functions.dodaj_pracownika(id_pracownika, imie, nazwisko, data_urodzenia, pesel, miejsce_zamieszkania, telefon, mail, 'Recepcjonistka')

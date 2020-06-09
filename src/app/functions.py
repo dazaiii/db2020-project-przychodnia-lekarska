@@ -210,3 +210,50 @@ def godziny_przyjec_lekarza(imie_lekarza, nazwisko_lekarza):
 
     finally:
         connection.close()
+
+
+
+
+#6
+def id_osoby(tabela):
+    connection = connect()
+    try:
+        with connection.cursor() as cursor:
+            sql = "SELECT COUNT(*) FROM %s;" % (tabela)
+            cursor.execute(sql)
+            result = cursor.fetchone()
+            print(result)
+            id_os = int(result[0]) + 1
+    finally:
+        connection.close()
+        return id_os
+
+
+#6
+def dodaj_pacjenta(id_pacjenta,imie, nazwisko, data_urodzenia, pesel, miejsce_zamieszkania, telefon, mail,ubezpieczenie):
+    connection = connect()
+    try:
+        with connection.cursor() as cursor:
+            sql = "INSERT INTO `pacjent` (`ID_pacjenta`, `Imie`, `Nazwisko`, `Data_urodzenia`, `Pesel`, `Miejsce_zamieszkania`, `Telefon`, `Mail`, `Ubezpieczenie`) VALUES(%s, '%s', '%s', '%s', '%s', '%s', %s, '%s', %s)," % (
+                id_pacjenta,imie, nazwisko, data_urodzenia, pesel, miejsce_zamieszkania, telefon, mail,ubezpieczenie)
+
+            cursor.execute(sql)
+            connection.commit()
+    finally:
+        connection.close()
+
+
+#6
+def dodaj_pracownika(id_pracownika,imie,nazwisko,data_urodzenia,pesel,miejsce_zamieszkania,telefon,mail,funkcja):
+    connection = connect()
+    try:
+        with connection.cursor() as cursor:
+            sql = "INSERT INTO `pracownik` (`ID_pracownika`, `Imie`, `Nazwisko`, `Data_urodzenia`, `Pesel`, " \
+                  "`Miejsce_zamieszkania`, `Telefon`, `Mail`, `Funkcja`) " \
+                  "VALUES (%dsS, '%s', '%s', '%s', '%s', '%s', %s, '%s', '%s')," % (
+                id_pracownika,imie,nazwisko,data_urodzenia,pesel,miejsce_zamieszkania,telefon,mail,funkcja)
+
+            cursor.execute(sql)
+            connection.commit()
+    finally:
+        connection.close()
