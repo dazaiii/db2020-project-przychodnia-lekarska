@@ -191,7 +191,9 @@ def godziny_przyjec():
     finally:
         connection.close()
 
-#6
+
+
+#5
 def godziny_przyjec_lekarza(imie_lekarza, nazwisko_lekarza):
     connection = connect()
     try:

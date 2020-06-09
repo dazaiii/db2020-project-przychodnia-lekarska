@@ -99,10 +99,15 @@ elif opcja == 4:
 
 #Wyświetl godziny przyjęć lekarzy
 elif opcja == 5:
-    functions.godziny_przyjec()
+    print('Wyświetl godziny przyjęć:')
+    print('1. Wszystkich lekarzy')
+    print('2. Jednego lekarza')
+    wybor = int(input('Wybierz opcję 1 lub 2: '))
 
-#Wyświetl godziny przyjęć i gabinet konkretnego lekarza
-elif opcja == 6:
-    imie_lekarza = input('Podaj imię lekarza: ')
-    nazwisko_lekarza = input('Podaj nazwisko lekarza: ')
-    functions.godziny_przyjec_lekarza(imie_lekarza, nazwisko_lekarza)
+    if (wybor == 1):
+        functions.godziny_przyjec()
+
+    else:
+        imie_lekarza = input('Podaj imię lekarza: ')
+        nazwisko_lekarza = input('Podaj nazwisko lekarza: ')
+        functions.godziny_przyjec_lekarza(imie_lekarza, nazwisko_lekarza)
