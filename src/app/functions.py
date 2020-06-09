@@ -1,5 +1,4 @@
 import pymysql
-import _datetime #nie działa
 
 
 def connect():
@@ -13,6 +12,8 @@ def connect():
     return connection
 
 
+
+#1
 def ubezpieczenie(imie, nazwisko):
     connection = connect()
     try:
@@ -26,6 +27,8 @@ def ubezpieczenie(imie, nazwisko):
         return result  # result[0] zwraca informację czy pacjent ma ubezpieczenie, result[1] ID_pacjenta
 
 
+
+#1
 def urlop(imie_lekarza, nazwisko_lekarza):
     connection = connect()
     try:
@@ -35,6 +38,7 @@ def urlop(imie_lekarza, nazwisko_lekarza):
                   "INNER JOIN `gabinet` ON `gabinet`.`ID_pracownika` = `lekarz`.`ID_pracownika`" \
                   "WHERE `pracownik`.`Imie` = '%s' AND `pracownik`.`Nazwisko` = '%s';" % (
                       imie_lekarza, nazwisko_lekarza)
+
             cursor.execute(sql)
             result = cursor.fetchone()
             # print(result)
@@ -43,6 +47,8 @@ def urlop(imie_lekarza, nazwisko_lekarza):
         return result  # result[0] oznacza czy lekarz jest na urlopie, result[1] to jego ID, result[2] ID_gabinetu w którym przyjmuje
 
 
+
+#1
 def dostepnosc_gabinetu(id_pracownika, godzina, data):
     connection = connect()
     try:
@@ -51,14 +57,17 @@ def dostepnosc_gabinetu(id_pracownika, godzina, data):
                   "WHERE `wizyta`.`ID_pracownika` = '%s' AND `wizyta`.`Godzina_wizyty` = '%s' AND " \
                   "`wizyta`.`Data_wizyty` = '%s';" \
                   % (id_pracownika, godzina, data)
+
             cursor.execute(sql)
             result = cursor.fetchone()
-            print(result)
+            #print(result)
     finally:
         connection.close()
         return int(result[0])
 
 
+
+#1
 def ID_wizyty():
     connection = connect()
     try:
@@ -72,6 +81,8 @@ def ID_wizyty():
         return id_wizyty
 
 
+
+#1
 def zarejestruj(typ, id_pracownika, id_pacjenta, id_gabinetu, data, godzina):
     connection = connect()
     try:
@@ -80,13 +91,14 @@ def zarejestruj(typ, id_pracownika, id_pacjenta, id_gabinetu, data, godzina):
             print(id_wizyty, typ, id_pracownika, id_pacjenta, id_gabinetu, data, godzina)
             sql = "INSERT INTO `wizyta` VALUES(%s, '%s', %s, %s, %s, '%s', '%s');" % (
                 id_wizyty, typ, id_pracownika, id_pacjenta, id_gabinetu, data, godzina)
-            print(sql)
             cursor.execute(sql)
             connection.commit()
     finally:
         connection.close()
 
 
+
+#2
 def recepta(imie, nazwisko):
     connection = connect()
     try:
@@ -96,45 +108,72 @@ def recepta(imie, nazwisko):
                   "FROM `pacjent`  LEFT JOIN `wizyta` ON `wizyta`.`ID_pacjenta` = `pacjent`.`ID_pacjenta`  " \
                   "LEFT JOIN `recepta` ON `recepta`.`ID_wizyty` = `wizyta`.`ID_wizyty` " \
                   "WHERE `pacjent`.`Imie` = '%s' AND `pacjent`.`Nazwisko` = '%s'" % (imie, nazwisko)
+
             cursor.execute(sql)
-            result = cursor.fetchall()
-            print(result)
+            rows = cursor.fetchall()
+            for row in rows:
+                print(row[0], row[1], row[2], row[3], row[4])
     finally:
         connection.close()
 
 
-def na_urlopie():
+
+#3
+def na_urlopie(wybor):
     connection = connect()
     try:
         with connection.cursor() as cursor:
             sql = "SELECT pracownik.Imie, pracownik.Nazwisko, lekarz.Urlop " \
                   "FROM pracownik  INNER JOIN lekarz ON lekarz.ID_pracownika = pracownik.ID_pracownika " \
-                  "WHERE lekarz.Urlop = '1' " \
-                  "ORDER BY Pracownik.Nazwisko ASC, Pracownik.Imie ASC;"
+                  "WHERE lekarz.Urlop = '%s' " \
+                  "ORDER BY Pracownik.Nazwisko ASC, Pracownik.Imie ASC;" % (wybor)
 
             cursor.execute(sql)
-            result = cursor.fetchall()
-            print(result)
+            rows = cursor.fetchall()
+            for row in rows:
+                print(row[0], row[1], row[2])
 
     finally:
         connection.close()
 
 
-def dane_kontaktowe_lekarza(imie_lekarza, nazwisko_lekarza):
+#4 dane kontaktowe wielu osób
+def dane_kontaktowe(tabela):
     connection = connect()
     try:
         with connection.cursor() as cursor:
-            sql = "SELECT pracownik.Imie, pracownik.Nazwisko, lekarz.Specjalizacja, pracownik.Telefon, pracownik.Mail " \
-                  "FROM pracownik  INNER JOIN lekarz ON lekarz.ID_pracownika = pracownik.ID_pracownika " \
-                  "WHERE pracownik.Imie = '%s' AND pracownik.Nazwisko = '%s';" % (imie_lekarza, nazwisko_lekarza)
+            sql = "SELECT Imie, Nazwisko, Telefon, Mail " \
+                  "FROM %s "  % (tabela)
+
             cursor.execute(sql)
-            result = cursor.fetchall()
-            print(result)
+            rows = cursor.fetchall()
+            for row in rows:
+                print(row[0], row[1], row[2], row[3])
 
     finally:
         connection.close()
 
 
+#4 dane kontaktowe jednej osoby
+def dane_kontaktowe_1(tabela,imie, nazwisko):
+    connection = connect()
+    try:
+        with connection.cursor() as cursor:
+            sql = "SELECT Imie, Nazwisko, Telefon, Mail " \
+                  "FROM %s " \
+                  "WHERE Imie = '%s' AND Nazwisko = '%s';" % (tabela, imie, nazwisko)
+
+            cursor.execute(sql)
+            rows = cursor.fetchall()
+            for row in rows:
+                print(row[0], row[1], row[2], row[3])
+
+    finally:
+        connection.close()
+
+
+
+#5
 def godziny_przyjec():
     connection = connect()
     try:
@@ -145,43 +184,9 @@ def godziny_przyjec():
                   "ORDER BY Pracownik.Nazwisko ASC, Pracownik.Imie ASC; "
 
             cursor.execute(sql)
-            result = cursor.fetchall()
-            print(result)
-
-    finally:
-        connection.close()
-
-
-def wizyty_lekarza_w_dniu(imie_lekarza, nazwisko_lekarza, dzien):
-    connection = connect()
-    try:
-        with connection.cursor() as cursor:
-            sql = "SELECT pracownik.Imie, pracownik.Nazwisko, wizyta.Data_wizyty, wizyta.Godzina_wizyty " \
-                  "FROM pracownik  INNER JOIN wizyta ON wizyta.ID_pracownika = pracownik.ID_pracownika " \
-                  "WHERE pracownik.Imie = '%s' AND pracownik.Nazwisko = '%s' AND wizyta.Data_wizyty = '%s' " \
-                  "ORDER BY wizyta.Godzina_wizyty ASC;" % (imie_lekarza, nazwisko_lekarza, dzien)
-
-            cursor.execute(sql)
-            result = cursor.fetchall()
-            print(result)
-
-    finally:
-        connection.close()
-        #Trzeba poprawić aby wyświetlało dobrze godzinę
-
-
-def wizyty_gabinet(nr_gabinetu):
-    connection = connect()
-    try:
-        with connection.cursor() as cursor:
-            sql = "SELECT gabinet.Nr_gabinetu, gabinet.Pietro, wizyta.ID_wizyty, pacjent.Imie, pacjent.Nazwisko " \
-                  "FROM gabinet  " \
-                  "LEFT JOIN wizyta ON wizyta.ID_gabinetu = gabinet.ID_gabinetu  " \
-                  "LEFT JOIN pacjent ON wizyta.ID_pacjenta = pacjent.ID_pacjenta WHERE gabinet.Nr_gabinetu = '%s';" % (nr_gabinetu)
-
-            cursor.execute(sql)
-            result = cursor.fetchall()
-            print(result)
+            rows = cursor.fetchall()
+            for row in rows:
+                print(row[0], row[1], row[2], row[3], row[4])
 
     finally:
         connection.close()

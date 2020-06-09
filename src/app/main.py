@@ -5,11 +5,9 @@ import functions
 print('Menu')
 print('1. Zarejestruj pacjenta')
 print('2. Wyswietl receptę')
-print('3. Sprawdz czy lekarz jest na urlopie')
-print('4. Wyświetl dane kontaktowe lekarza')
-print('5. Wyświetl godziny przyjęć wszystkich lekarzy alfabetycznie')
-print('6. Wyświetl wizyty danego lekarza w danym dniu')
-print('7. Wyświetl zaplanowane wizyty w danym gabinecie')
+print('3. Wypisz lekarzy na urlopie/nie na urlopie')
+print('4. Wyświetl dane kontaktowe')
+print('5. Wyświetl godziny przyjęć lekarzy')
 
 opcja = int(input('Wybierz opcje: '))
 print(opcja)
@@ -44,39 +42,59 @@ if opcja == 1:
         print('Pacjent nie ma ubezpieczenia i nie może zostać zarejestrowany.')
 
 
-#Wyświetl receptę
+#Wyświetl receptę danego pacjenta
 elif opcja == 2:
     imie = input('Podaj imie pacjenta: ')
-    nazwisko = input('Podaj nazwikso pacjenta: ')
+    nazwisko = input('Podaj nazwisko pacjenta: ')
     functions.recepta(imie, nazwisko)
 
 
-#Wypisz lekarzy na urlopie i posegreguj ich alfabetycznie
+#Wypisz lekarzy na urlopie/nie na urlopie
 elif opcja == 3:
-    functions.na_urlopie()
+    print('1. Wypisz lekarzy na urlopie')
+    print('2. Wypisz lekarzy nie na urlopie')
+    wybor = int(input('Wybierz opcję 1 lub 2: '))
+
+    if (wybor == 2):
+        wybor = 0
+
+    functions.na_urlopie(wybor)
 
 
-#Wypisz dane kontaktowe lekarza podając jego imię i nazwisko
+#Wypisz dane kontaktowe
 elif opcja == 4:
-    imie_lekarza = input('Podaj imię lekarza: ')
-    nazwisko_lekarza = input('Podaj nazywa lekarza: ')
-    functions.dane_kontaktowe_lekarza(imie_lekarza, nazwisko_lekarza)
 
+    print('Kogo dane kontaktowe chcesz wypisać?')
+    print('1. Lekarza')
+    print('2. Pacjenta')
+    wybor = int(input('Wybierz opcję 1 lub 2: '))
+
+    if(wybor == 1):
+        print('Chcesz wypisać:')
+        print('1. Dane kontaktowe wszystkich lekarzy')
+        print('2. Dane kontaktowe konkretnego lekarza')
+        wybor2 = int(input('Wybierz opcję 1 lub 2: '))
+
+        if(wybor2 == 1):
+            functions.dane_kontaktowe('pracownik')
+        else:
+            imie_lekarza = input('Podaj imię lekarza: ')
+            nazwisko_lekarza = input('Podaj nazwisko lekarza: ')
+            functions.dane_kontaktowe_1('pracownik', imie_lekarza, nazwisko_lekarza)
+
+    elif(wybor == 2):
+        print('Chcesz wypisać:')
+        print('1. Dane kontaktowe wszystkich pacjentów')
+        print('2. Dane kontaktowe konkretnego pacjenta')
+        wybor2 = int(input('Wybierz opcję 1 lub 2: '))
+
+        if (wybor2 == 1):
+            functions.dane_kontaktowe('pacjent')
+        else:
+            imie_pacjenta = input('Podaj imię pacjenta: ')
+            nazwisko_pacjenta = input('Podaj nazwisko pacjenta: ')
+            functions.dane_kontaktowe_1('pacjent', imie_pacjenta, nazwisko_pacjenta)
 
 #Wyświetl godziny przyjęć lekarzy
 elif opcja == 5:
     functions.godziny_przyjec()
-
-
-#Wyświetl wizyty danego lekarza w danym dniu
-elif opcja == 6:
-    imie_lekarza = input('Podaj imię lekarza: ')
-    nazwisko_lekarza = input('Podaj nazywa lekarza: ')
-    dzien = input('Podaj dzień w formacie RRRR-MM-DD: ')
-    functions.wizyty_lekarza_w_dniu(imie_lekarza, nazwisko_lekarza, dzien)
-
-
-#Wyświetl zaplanowane wizyty w danym gabinecie
-elif opcja == 7:
-    nr_gabinetu = input('Podaj numer gabinetu: ')
-    functions.wizyty_gabinet(nr_gabinetu)
