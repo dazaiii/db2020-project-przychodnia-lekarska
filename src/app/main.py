@@ -8,6 +8,8 @@ print('2. Wyswietl receptę')
 print('3. Wypisz lekarzy na urlopie/nie na urlopie')
 print('4. Wyświetl dane kontaktowe')
 print('5. Wyświetl godziny przyjęć lekarzy')
+print('6. Wyświetl godziny przyjęć i gabinet konkretnego lekarza')
+
 
 opcja = int(input('Wybierz opcje: '))
 print(opcja)
@@ -98,3 +100,9 @@ elif opcja == 4:
 #Wyświetl godziny przyjęć lekarzy
 elif opcja == 5:
     functions.godziny_przyjec()
+
+#Wyświetl godziny przyjęć i gabinet konkretnego lekarza
+elif opcja == 6:
+    imie_lekarza = input('Podaj imię lekarza: ')
+    nazwisko_lekarza = input('Podaj nazwisko lekarza: ')
+    functions.godziny_przyjec_lekarza(imie_lekarza, nazwisko_lekarza)

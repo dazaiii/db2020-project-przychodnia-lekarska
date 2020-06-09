@@ -190,3 +190,21 @@ def godziny_przyjec():
 
     finally:
         connection.close()
+
+#6
+def godziny_przyjec_lekarza(imie_lekarza, nazwisko_lekarza):
+    connection = connect()
+    try:
+        with connection.cursor() as cursor:
+            sql = "SELECT pracownik.Imie, pracownik.Nazwisko, lekarz.Specjalizacja, gabinet.Nr_gabinetu, gabinet.Pietro, gabinet.Godzina_rozpoczecia, gabinet.Godzina_zakonczenia " \
+                  "FROM pracownik  INNER JOIN lekarz ON lekarz.ID_pracownika = pracownik.ID_pracownika " \
+                  "INNER JOIN gabinet ON gabinet.ID_pracownika = lekarz.ID_pracownika " \
+                  "WHERE pracownik.Imie = '%s' AND pracownik.Nazwisko = '%s';" % (imie_lekarza, nazwisko_lekarza)
+
+            cursor.execute(sql)
+            rows = cursor.fetchall()
+            for row in rows:
+                print(row[0], row[1], row[2], row[3], row[4], row[5], row[6])
+
+    finally:
+        connection.close()
