@@ -353,3 +353,16 @@ def wyszukaj_skierowania(imie_pacjenta, nazwisko_pacjenta):
 
     finally:
         connection.close()
+
+
+#10
+def modyfikuj_dane_kontaktowe(tabela,imie,nazwisko,kolumna,dane):
+    connection = connect()
+    try:
+        with connection.cursor() as cursor:
+            sql = "UPDATE %s SET %s = '%s' WHERE Imie = '%s' AND Nazwisko = '%s'" % (tabela, kolumna, dane, imie, nazwisko)
+
+            cursor.execute(sql)
+            connection.commit()
+    finally:
+        connection.close()

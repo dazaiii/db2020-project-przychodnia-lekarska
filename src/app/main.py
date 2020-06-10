@@ -12,6 +12,7 @@ print('6. Dodaj osobę do bazy')
 print('7. Wyświetl wizyty')
 print('8. Wyświetl historię wizyt pacjenta')
 print('9. Wyświetl wszystkie skierowania danego pacjenta')
+print('10. Modyfikuj dane kontaktowe')
 
 opcja = int(input('Wybierz opcje: '))
 print(opcja)
@@ -190,3 +191,35 @@ elif opcja == 9:
     imie_pacjenta = input('Podaj imię pacjenta: ')
     nazwisko_pacjenta = input('Podaj nazwisko pacjenta: ')
     functions.wyszukaj_skierowania(imie_pacjenta, nazwisko_pacjenta)
+
+
+#Modyfikuj dane kontaktowe
+elif opcja == 10:
+    print('Kogo dane chcesz zmodyfikować: ')
+    print('1. Pracownika')
+    print('2. Pacjenta')
+    wybor = int(input('Wybierz opcję 1 lub 2: '))
+
+    if wybor == 1:
+        tabela = 'Pracownik'
+    else:
+        tabela = 'Pacjent'
+
+    imie = input('Podaj imię osoby której dane chcesz modyfikować: ')
+    nazwisko = input('Podaj nazwisko osoby której dane chcesz modyfikować: ')
+
+    print('Ktore dane chcesz modyfikować: ')
+    print('1. Telefon')
+    print('2. Mail')
+    print('3. Miejsce zamieszkania')
+    wybor2 = int(input('Wybierz opcję 1, 2 lub 3'))
+
+    if wybor2 == 1:
+        telefon = input('Podaj nowy numer telefonu: ')
+        functions.modyfikuj_dane_kontaktowe(tabela,imie,nazwisko,'telefon',telefon)
+    elif wybor2 == 2:
+        mail = input('Podaj nowy mail: ')
+        functions.modyfikuj_dane_kontaktowe(tabela, imie, nazwisko, 'mail', mail)
+    else:
+        miejsce = input('Podaj nowe miejsce zamieszkania: ')
+        functions.modyfikuj_dane_kontaktowe(tabela, imie, nazwisko, 'miejsce_zamieszkania', miejsce)
