@@ -234,7 +234,8 @@ def dodaj_pacjenta(id_pacjenta,imie, nazwisko, data_urodzenia, pesel, miejsce_za
     connection = connect()
     try:
         with connection.cursor() as cursor:
-            sql = "INSERT INTO `pacjent` (`ID_pacjenta`, `Imie`, `Nazwisko`, `Data_urodzenia`, `Pesel`, `Miejsce_zamieszkania`, `Telefon`, `Mail`, `Ubezpieczenie`) VALUES(%s, '%s', '%s', '%s', '%s', '%s', %s, '%s', %s)," % (
+            sql = "INSERT INTO `pacjent` (`ID_pacjenta`, `Imie`, `Nazwisko`, `Data_urodzenia`, `Pesel`, `Miejsce_zamieszkania`, " \
+                  "`Telefon`, `Mail`, `Ubezpieczenie`) VALUES(%s, '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s')," % (
                 id_pacjenta,imie, nazwisko, data_urodzenia, pesel, miejsce_zamieszkania, telefon, mail,ubezpieczenie)
 
             cursor.execute(sql)
@@ -250,10 +251,105 @@ def dodaj_pracownika(id_pracownika,imie,nazwisko,data_urodzenia,pesel,miejsce_za
         with connection.cursor() as cursor:
             sql = "INSERT INTO `pracownik` (`ID_pracownika`, `Imie`, `Nazwisko`, `Data_urodzenia`, `Pesel`, " \
                   "`Miejsce_zamieszkania`, `Telefon`, `Mail`, `Funkcja`) " \
-                  "VALUES (%dsS, '%s', '%s', '%s', '%s', '%s', %s, '%s', '%s')," % (
+                  "VALUES (%s, '%s', '%s', '%s', '%s', '%s', %s, '%s', '%s')," % (
                 id_pracownika,imie,nazwisko,data_urodzenia,pesel,miejsce_zamieszkania,telefon,mail,funkcja)
 
             cursor.execute(sql)
             connection.commit()
+    finally:
+        connection.close()
+
+
+#7
+def wyswietl_wizyty():
+    connection = connect()
+    try:
+        with connection.cursor() as cursor:
+            sql = "SELECT pracownik.Imie, pracownik.Nazwisko, wizyta.Data_wizyty, wizyta.Godzina_wizyty, gabinet.Nr_gabinetu " \
+                  "FROM pracownik  INNER JOIN wizyta ON wizyta.ID_pracownika = pracownik.ID_pracownika  " \
+                  "INNER JOIN gabinet ON wizyta.ID_gabinetu = gabinet.ID_gabinetu " \
+                  "ORDER BY wizyta.data_wizyty ASC, wizyta.godzina_wizyty ASC;"
+
+            cursor.execute(sql)
+            rows = cursor.fetchall()
+            for row in rows:
+                print(row[0], row[1], row[2], row[3])
+
+    finally:
+        connection.close()
+
+
+#7
+def wizyty_lekarza_w_dniu(imie_lekarza, nazwisko_lekarza, dzien):
+    connection = connect()
+    try:
+        with connection.cursor() as cursor:
+            sql = "SELECT pracownik.Imie, pracownik.Nazwisko, wizyta.Data_wizyty, wizyta.Godzina_wizyty " \
+                  "FROM pracownik  INNER JOIN wizyta ON wizyta.ID_pracownika = pracownik.ID_pracownika " \
+                  "WHERE pracownik.Imie = '%s' AND pracownik.Nazwisko = '%s' AND wizyta.Data_wizyty = '%s' " \
+                  "ORDER BY wizyta.Godzina_wizyty ASC;" % (imie_lekarza, nazwisko_lekarza, dzien)
+
+            cursor.execute(sql)
+            rows = cursor.fetchall()
+            for row in rows:
+                print(row[0], row[1], row[2], row[3])
+
+    finally:
+        connection.close()
+
+
+#7
+def wizyty_gabinet(nr_gabinetu):
+    connection = connect()
+    try:
+        with connection.cursor() as cursor:
+            sql = "SELECT gabinet.Nr_gabinetu, gabinet.Pietro, wizyta.ID_wizyty, pacjent.Imie, pacjent.Nazwisko " \
+                  "FROM gabinet  " \
+                  "LEFT JOIN wizyta ON wizyta.ID_gabinetu = gabinet.ID_gabinetu  " \
+                  "LEFT JOIN pacjent ON wizyta.ID_pacjenta = pacjent.ID_pacjenta WHERE gabinet.Nr_gabinetu = '%s';" % (nr_gabinetu)
+
+            cursor.execute(sql)
+            rows = cursor.fetchall()
+            for row in rows:
+                print(row[0], row[1], row[2], row[3],row[4])
+
+    finally:
+        connection.close()
+
+
+#8
+def historia_wizyt(imie,nazwisko):
+    connection = connect()
+    try:
+        with connection.cursor() as cursor:
+            sql = "SELECT pacjent.Imie, pacjent.Nazwisko, wizyta.Data_wizyty, wizyta.Godzina_wizyty FROM pacjent  " \
+                  "INNER JOIN wizyta ON wizyta.ID_pacjenta = pacjent.ID_pacjenta " \
+                  "WHERE pacjent.Imie = '%s' AND pacjent.Nazwisko = '%s' " \
+                  "ORDER BY Wizyta.Data_wizyty ASC, Wizyta.Godzina_wizyty ASC;" % (imie,nazwisko)
+
+            cursor.execute(sql)
+            rows = cursor.fetchall()
+            for row in rows:
+                print(row[0],row[1],row[2],row[3])
+    finally:
+        connection.close()
+
+
+#9
+def wyszukaj_skierowania(imie_pacjenta, nazwisko_pacjenta):
+    connection = connect()
+    try:
+        with connection.cursor() as cursor:
+            sql = "SELECT pacjent.Imie, pacjent.Nazwisko, wizyta.ID_pacjenta, skierowanie.ID_skierowania, skierowanie.Typ " \
+                  "FROM pacjent " \
+                  "INNER JOIN wizyta ON wizyta.ID_pacjenta = pacjent.ID_pacjenta  " \
+                  "INNER JOIN skierowanie ON skierowanie.ID_wizyty = wizyta.ID_wizyty " \
+                  "WHERE pacjent.Imie = '%s' AND pacjent.Nazwisko = '%s';" % (imie_pacjenta, nazwisko_pacjenta)
+
+            cursor.execute(sql)
+            rows = cursor.fetchall()
+            for row in rows:
+                print(row[0], row[1], row[2], row[3], row[4])
+
     finally:
         connection.close()

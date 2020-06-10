@@ -8,8 +8,10 @@ print('2. Wyswietl receptę')
 print('3. Wypisz lekarzy na urlopie/nie na urlopie')
 print('4. Wyświetl dane kontaktowe')
 print('5. Wyświetl godziny przyjęć lekarzy')
-print('6. Wyświetl godziny przyjęć i gabinet konkretnego lekarza')
-
+print('6. Dodaj osobę do bazy')
+print('7. Wyświetl wizyty')
+print('8. Wyświetl historię wizyt pacjenta')
+print('9. Wyświetl wszystkie skierowania danego pacjenta')
 
 opcja = int(input('Wybierz opcje: '))
 print(opcja)
@@ -154,3 +156,37 @@ elif opcja == 6:
             functions.dodaj_pracownika(id_pracownika, imie, nazwisko, data_urodzenia, pesel, miejsce_zamieszkania, telefon, mail, 'Pielęgniarka')
         else:
             functions.dodaj_pracownika(id_pracownika, imie, nazwisko, data_urodzenia, pesel, miejsce_zamieszkania, telefon, mail, 'Recepcjonistka')
+
+
+
+#Wyświetl wizyty
+elif opcja == 7:
+    print('Wyświetl wizyty:')
+    print('1. Wszystkie')
+    print('2. W danym dniu danego lekarza')
+    print('3. W danym gabinecie')
+    wybor = int(input('Wybierz opcję 1 lub 2: '))
+    if wybor == 1:
+        functions.wyswietl_wizyty()
+    elif wybor == 2:
+        imie_lekarza = input('Podaj imię lekarza: ')
+        nazwisko_lekarza = input('Podaj nazwisko lekarza: ')
+        dzien = input('Podaj dzień w formacie RRRR-MM-DD: ')
+        functions.wizyty_lekarza_w_dniu(imie_lekarza, nazwisko_lekarza, dzien)
+    else:
+        nr_gabinetu = input('Podaj numer gabinetu: ')
+        functions.wizyty_gabinet(nr_gabinetu)
+
+
+#Wyświetl historię wizyt pacjenta
+elif opcja == 8:
+    imie = input('Podaj imie pajcenta: ')
+    nazwisko = input('Podaj nazwisko pacjenta: ')
+    functions.historia_wizyt(imie, nazwisko)
+
+
+#Wyświetl wszystkie skierowania danego pacjenta
+elif opcja == 9:
+    imie_pacjenta = input('Podaj imię pacjenta: ')
+    nazwisko_pacjenta = input('Podaj nazwisko pacjenta: ')
+    functions.wyszukaj_skierowania(imie_pacjenta, nazwisko_pacjenta)
