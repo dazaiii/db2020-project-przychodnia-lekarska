@@ -449,3 +449,19 @@ def szczepienia_pacjenta(imie_pacjenta, nazwisko_pacjenta):
 
     finally:
         connection.close()
+
+#14
+def lekarze_etat(nazwa):
+    connection = connect()
+    try:
+        with connection.cursor() as cursor:
+            sql = "SELECT pracownik.Imie, pracownik.Nazwisko, lekarz.Etat FROM pracownik  " \
+                  "INNER JOIN lekarz ON lekarz.ID_pracownika = pracownik.ID_pracownika WHERE lekarz.Etat = '%s'; " % (nazwa)
+
+            cursor.execute(sql)
+            rows = cursor.fetchall()
+            for row in rows:
+                print(row[0], row[1], row[2])
+
+    finally:
+        connection.close()

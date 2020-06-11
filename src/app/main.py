@@ -16,6 +16,7 @@ print('10. Modyfikuj dane kontaktowe')
 print('11. Usuń wizytę z bazy')
 print('12. Wyświetl historię wizyt pacjenta')
 print('13. Wyświetl zaplanowane szczepienia')
+print('14. Wyświetl wszystkich lekarzy na stażu lub na pełnym etacie')
 
 opcja = int(input('Wybierz opcje: '))
 print(opcja)
@@ -265,3 +266,15 @@ elif opcja == 13:
         imie_pacjenta = input('Podaj imię pacjenta: ')
         nazwisko_pacjenta = input('Podaj nazwisko pacjenta: ')
         functions.szczepienia_pacjenta(imie_pacjenta, nazwisko_pacjenta)
+
+
+#Wyświetl wszystkich lekarzy na stażu lub na pełnym etacie
+elif opcja == 14:
+    print('1. Wyświetl wszystkich lekarzy na stażu')
+    print('2. Wyświetl wszystkich lekarzy na pełnym etacie')
+    wybor = int(input('Wybierz opcję 1 lub 2: '))
+
+    if wybor == 1:
+        functions.lekarze_etat('staż')
+    elif wybor == 2:
+        functions.lekarze_etat('pełny')
