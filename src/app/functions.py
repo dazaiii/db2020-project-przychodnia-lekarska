@@ -390,3 +390,22 @@ def odwolaj_wizyte(imie,nazwisko,data,godzina):
 
     finally:
         connection.close()
+
+
+#12
+def historia_wizyt_przedzial(imie, nazwisko, dzien1, dzien2):
+    connection = connect()
+    try:
+        with connection.cursor() as cursor:
+            sql = "SELECT pacjent.Imie, pacjent.Nazwisko, wizyta.Data_wizyty, wizyta.Godzina_wizyty FROM pacjent  " \
+                  "INNER JOIN wizyta ON wizyta.ID_pacjenta = pacjent.ID_pacjenta " \
+                  "WHERE pacjent.Imie = '%s' AND pacjent.Nazwisko = '%s' AND Data_wizyty BETWEEN '%s' AND '%s'" \
+                  "ORDER BY Wizyta.Data_wizyty ASC, Wizyta.Godzina_wizyty ASC;" % (imie,nazwisko,dzien1,dzien2)
+
+            cursor.execute(sql)
+            rows = cursor.fetchall()
+            for row in rows:
+                print(row[0], row[1], row[2], row[3])
+
+    finally:
+        connection.close()

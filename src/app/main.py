@@ -14,6 +14,7 @@ print('8. Wyświetl historię wizyt pacjenta')
 print('9. Wyświetl wszystkie skierowania danego pacjenta')
 print('10. Modyfikuj dane kontaktowe')
 print('11. Usuń wizytę z bazy')
+print('12. Wyświetl historię wizyt pacjenta')
 
 opcja = int(input('Wybierz opcje: '))
 print(opcja)
@@ -231,3 +232,21 @@ elif opcja == 11:
     data = input('Podaj datę wizyty: ')
     godzina = input('Podaj godzinę wizyty: ')
     functions.odwolaj_wizyte(imie,nazwisko,data,godzina)
+
+
+#Wyświetl historię wizyt pacjenta
+elif opcja == 12:
+    imie = input('Podaj imie pajcenta: ')
+    nazwisko = input('Podaj nazwisko pacjenta: ')
+
+    print('1. Cała historia pacjenta')
+    print('2. Historia pacjenta w przedziale dat')
+    wybor = int(input('Wybierz opcję 1 lub 2: '))
+
+    if wybor == 1:
+        functions.historia_wizyt(imie, nazwisko)
+    elif wybor == 2:
+        print('Podaj przedział dni w jakim szukasz wizyt pacjenta: ')
+        dzien1 = input('Podaj początek przedziału w formacie RRRR-MM-DD: ')
+        dzien2 = input('Podaj koniec przedziału w formacie RRRR-MM-DD: ')
+        functions.historia_wizyt_przedzial(imie, nazwisko, dzien1, dzien2)
