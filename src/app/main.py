@@ -15,6 +15,7 @@ print('9. Wyświetl wszystkie skierowania danego pacjenta')
 print('10. Modyfikuj dane kontaktowe')
 print('11. Usuń wizytę z bazy')
 print('12. Wyświetl historię wizyt pacjenta')
+print('13. Wyświetl zaplanowane szczepienia')
 
 opcja = int(input('Wybierz opcje: '))
 print(opcja)
@@ -250,3 +251,17 @@ elif opcja == 12:
         dzien1 = input('Podaj początek przedziału w formacie RRRR-MM-DD: ')
         dzien2 = input('Podaj koniec przedziału w formacie RRRR-MM-DD: ')
         functions.historia_wizyt_przedzial(imie, nazwisko, dzien1, dzien2)
+
+        
+#Wyświetl zaplanowane szczepienia
+elif opcja == 13:
+    print('1. Wyświetl wszystkie zaplanowane szczepienia')
+    print('2. Wyświetl wszystkie zaplanowane szczepienia konkretnego pacjenta')
+    wybor = int(input('Wybierz opcję 1 lub 2: '))
+
+    if wybor == 1:
+        functions.szczepienia()
+    elif wybor == 2:
+        imie_pacjenta = input('Podaj imię pacjenta: ')
+        nazwisko_pacjenta = input('Podaj nazwisko pacjenta: ')
+        functions.szczepienia_pacjenta(imie_pacjenta, nazwisko_pacjenta)

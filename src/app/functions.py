@@ -409,3 +409,43 @@ def historia_wizyt_przedzial(imie, nazwisko, dzien1, dzien2):
 
     finally:
         connection.close()
+
+#13
+def szczepienia():
+    connection = connect()
+    try:
+        with connection.cursor() as cursor:
+            sql = "SELECT wizyta.Typ, pacjent.Imie, pacjent.Nazwisko, wizyta.Data_wizyty, wizyta.Godzina_wizyty, gabinet.Nr_gabinetu " \
+                  "FROM wizyta  " \
+                  "INNER JOIN pacjent ON wizyta.ID_pacjenta = pacjent.ID_pacjenta  " \
+                  "INNER JOIN gabinet ON wizyta.ID_gabinetu = gabinet.ID_gabinetu " \
+                  "WHERE wizyta.Typ = 'szczepienie' " \
+                  "ORDER BY Wizyta.Data_wizyty ASC, Wizyta.Godzina_wizyty ASC;"
+
+            cursor.execute(sql)
+            rows = cursor.fetchall()
+            for row in rows:
+                print(row[0], row[1], row[2], row[3],row[4], row[5])
+
+    finally:
+        connection.close()
+
+#13
+def szczepienia_pacjenta(imie_pacjenta, nazwisko_pacjenta):
+    connection = connect()
+    try:
+        with connection.cursor() as cursor:
+            sql = "SELECT wizyta.Typ, pacjent.Imie, pacjent.Nazwisko, wizyta.Data_wizyty, wizyta.Godzina_wizyty, gabinet.Nr_gabinetu " \
+                  "FROM wizyta  " \
+                  "INNER JOIN pacjent ON wizyta.ID_pacjenta = pacjent.ID_pacjenta  " \
+                  "INNER JOIN gabinet ON wizyta.ID_gabinetu = gabinet.ID_gabinetu " \
+                  "WHERE wizyta.Typ = 'szczepienie' AND pacjent.Imie = '%s' AND pacjent.Nazwisko = '%s' " \
+                  "ORDER BY Wizyta.Data_wizyty ASC, Wizyta.Godzina_wizyty ASC;" % (imie_pacjenta, nazwisko_pacjenta)
+
+            cursor.execute(sql)
+            rows = cursor.fetchall()
+            for row in rows:
+                print(row[0], row[1], row[2], row[3], row[4], row[5])
+
+    finally:
+        connection.close()
