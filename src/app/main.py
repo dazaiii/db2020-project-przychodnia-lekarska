@@ -13,6 +13,7 @@ print('7. Wyświetl wizyty')
 print('8. Wyświetl historię wizyt pacjenta')
 print('9. Wyświetl wszystkie skierowania danego pacjenta')
 print('10. Modyfikuj dane kontaktowe')
+print('11. Usuń wizytę z bazy')
 
 opcja = int(input('Wybierz opcje: '))
 print(opcja)
@@ -223,3 +224,10 @@ elif opcja == 10:
     else:
         miejsce = input('Podaj nowe miejsce zamieszkania: ')
         functions.modyfikuj_dane_kontaktowe(tabela, imie, nazwisko, 'miejsce_zamieszkania', miejsce)
+
+elif opcja == 11:
+    imie = input('Podaj imie pacjenta: ')
+    nazwisko = input('Podaj nazwisko pacjenta: ')
+    data = input('Podaj datę wizyty: ')
+    godzina = input('Podaj godzinę wizyty: ')
+    functions.odwolaj_wizyte(imie,nazwisko,data,godzina)

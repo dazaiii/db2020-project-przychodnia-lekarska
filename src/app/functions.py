@@ -366,3 +366,27 @@ def modyfikuj_dane_kontaktowe(tabela,imie,nazwisko,kolumna,dane):
             connection.commit()
     finally:
         connection.close()
+
+
+#11
+def odwolaj_wizyte(imie,nazwisko,data,godzina):
+    connection = connect()
+    try:
+        with connection.cursor() as cursor:
+            sql = "Select ID_wizyty FROM wizyta WHERE id_pacjenta = (SELECT ID_pacjenta FROM pacjent WHERE Imie = '%s' " \
+                  "AND Nazwisko = '%s') AND Data_wizyty = '%s' AND Godzina_wizyty = '%s';" % (imie, nazwisko,data,godzina)
+            cursor.execute(sql)
+            id_wizyty = cursor.fetchone()
+            id_wizyty = int(id_wizyty[0])
+
+            sql = "DELETE FROM Skierowanie WHERE ID_wizyty = '%s'" % (id_wizyty)
+            cursor.execute(sql)
+            sql = "DELETE FROM Recepta WHERE ID_wizyty = '%s'" % (id_wizyty)
+            cursor.execute(sql)
+            sql = "DELETE FROM Wizyta WHERE ID_wizyty = '%s'" % (id_wizyty)
+            cursor.execute(sql)
+
+            connection.commit()
+
+    finally:
+        connection.close()
