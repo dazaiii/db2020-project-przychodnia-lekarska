@@ -11,7 +11,7 @@ SELECT COUNT(`wizyta`.`ID_pracownika`) FROM `wizyta`
 WHERE `wizyta`.`ID_pracownika` = '%s' AND `wizyta`.`Godzina_wizyty` = '%s' AND
 `wizyta`.`Data_wizyty` = '%s';
 
-SELECT COUNT(ID_wizyty) FROM Wizyta;"
+SELECT COUNT(ID_wizyty) FROM Wizyta;
 
 INSERT INTO `wizyta` VALUES(%s, '%s', %s, %s, %s, '%s', '%s');
 
@@ -84,6 +84,11 @@ INNER JOIN wizyta ON wizyta.ID_pacjenta = pacjent.ID_pacjenta
 WHERE pacjent.Imie = '%s' AND pacjent.Nazwisko = '%s'
 ORDER BY Wizyta.Data_wizyty ASC, Wizyta.Godzina_wizyty ASC;
 
+SELECT pacjent.Imie, pacjent.Nazwisko, wizyta.Data_wizyty, wizyta.Godzina_wizyty FROM pacjent
+INNER JOIN wizyta ON wizyta.ID_pacjenta = pacjent.ID_pacjenta
+WHERE pacjent.Imie = '%s' AND pacjent.Nazwisko = '%s' AND Data_wizyty BETWEEN '%s' AND '%s'
+ORDER BY Wizyta.Data_wizyty ASC, Wizyta.Godzina_wizyty ASC;
+
 /* 9. Wyświetl wszystkie skierowania danego pacjenta */
 
 SELECT pacjent.Imie, pacjent.Nazwisko, wizyta.ID_pacjenta, skierowanie.ID_skierowania, skierowanie.Typ
@@ -91,3 +96,62 @@ FROM pacjent
 INNER JOIN wizyta ON wizyta.ID_pacjenta = pacjent.ID_pacjenta
 INNER JOIN skierowanie ON skierowanie.ID_wizyty = wizyta.ID_wizyty
 WHERE pacjent.Imie = '%s' AND pacjent.Nazwisko = '%s';
+
+/* 10. Modyfikuj dane kontaktowe */
+
+UPDATE %s SET %s = '%s' WHERE Imie = '%s' AND Nazwisko = '%s';
+
+/* 11. Usuń wizytę z bazy */
+
+SELECT ID_wizyty FROM wizyta WHERE id_pacjenta = (SELECT ID_pacjenta FROM pacjent WHERE Imie = '%s'
+AND Nazwisko = '%s') AND Data_wizyty = '%s' AND Godzina_wizyty = '%s';
+
+DELETE FROM Skierowanie WHERE ID_wizyty = '%s'
+
+/* 12. Wyświetl zaplanowane szczepienia */
+
+SELECT wizyta.Typ, pacjent.Imie, pacjent.Nazwisko, wizyta.Data_wizyty, wizyta.Godzina_wizyty, gabinet.Nr_gabinetu
+FROM wizyta
+INNER JOIN pacjent ON wizyta.ID_pacjenta = pacjent.ID_pacjenta
+INNER JOIN gabinet ON wizyta.ID_gabinetu = gabinet.ID_gabinetu
+WHERE wizyta.Typ = 'szczepienie'
+ORDER BY Wizyta.Data_wizyty ASC, Wizyta.Godzina_wizyty ASC;
+
+SELECT wizyta.Typ, pacjent.Imie, pacjent.Nazwisko, wizyta.Data_wizyty, wizyta.Godzina_wizyty, gabinet.Nr_gabinetu
+FROM wizyta
+INNER JOIN pacjent ON wizyta.ID_pacjenta = pacjent.ID_pacjenta
+INNER JOIN gabinet ON wizyta.ID_gabinetu = gabinet.ID_gabinetu
+WHERE wizyta.Typ = 'szczepienie' AND pacjent.Imie = '%s' AND pacjent.Nazwisko = '%s'
+ORDER BY Wizyta.Data_wizyty ASC, Wizyta.Godzina_wizyty ASC;
+
+/* 13. Wyświetl wszystkich lekarzy na stażu lub na pełnym etacie */
+
+SELECT pracownik.Imie, pracownik.Nazwisko, lekarz.Etat FROM pracownik
+INNER JOIN lekarz ON lekarz.ID_pracownika = pracownik.ID_pracownika WHERE lekarz.Etat = '%s';
+
+/* 14. Wyświetl wszystkie osoby w bazie */
+
+SELECT Imie, Nazwisko, Data_urodzenia
+FROM Pacjent
+UNION SELECT Imie, Nazwisko, Data_urodzenia
+FROM Pracownik
+ORDER BY Data_urodzenia;
+
+/* 15. Wyszukaj pesel i datę urodzenia danego pacjenta */
+
+SELECT pacjent.Imie, pacjent.Nazwisko, pacjent.Data_urodzenia, pacjent.Pesel
+FROM pacjent
+WHERE pacjent.Imie = '%s' AND pacjent.Nazwisko = '%s';
+
+/* 16. Wpisz lekarzowi urlop */
+
+UPDATE Lekarz SET Lekarz.urlop = 1 WHERE (SELECT ID_pracownika from Pracownik WHERE Pracownik.Imie
+= '%s' AND Pracownik.Nazwisko = '%s') = ID_pracownika;
+
+/* 17. Zlicz pracowników o danej funkcji */
+
+SELECT Pracownik.Funkcja AS 'Zawod pracownika',
+COUNT(Pracownik.funkcja) AS 'Ilosc pracownikow'
+FROM Pracownik
+GROUP BY Pracownik.Funkcja
+ORDER BY Pracownik.Funkcja ASC;
