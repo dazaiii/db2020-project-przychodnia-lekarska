@@ -17,6 +17,8 @@ print('11. Usuń wizytę z bazy')
 print('12. Wyświetl historię wizyt pacjenta')
 print('13. Wyświetl zaplanowane szczepienia')
 print('14. Wyświetl wszystkich lekarzy na stażu lub na pełnym etacie')
+print('15. Wyświetl wszystkie osoby w bazie')
+print('16. Wyszukaj pesel i datę urodzenia danego pacjenta')
 
 opcja = int(input('Wybierz opcje: '))
 print(opcja)
@@ -233,7 +235,7 @@ elif opcja == 11:
     nazwisko = input('Podaj nazwisko pacjenta: ')
     data = input('Podaj datę wizyty: ')
     godzina = input('Podaj godzinę wizyty: ')
-    functions.odwolaj_wizyte(imie,nazwisko,data,godzina)
+    functions.usun_wizyte(imie,nazwisko,data,godzina)
 
 
 #Wyświetl historię wizyt pacjenta
@@ -278,3 +280,15 @@ elif opcja == 14:
         functions.lekarze_etat('staż')
     elif wybor == 2:
         functions.lekarze_etat('pełny')
+
+
+#Wyświetl wszystkie osoby w bazie
+elif opcja == 15:
+    functions.wyswietl_wszystkich()
+
+
+#Wyszukaj pesel i datę urodzenia danego pacjenta
+elif opcja == 16:
+    imie_pacjenta = input('Podaj imię pacjenta: ')
+    nazwisko_pacjenta = input('Podaj nazwisko pacjenta: ')
+    functions.wyszukaj_pesel(imie_pacjenta, nazwisko_pacjenta)

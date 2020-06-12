@@ -369,7 +369,7 @@ def modyfikuj_dane_kontaktowe(tabela,imie,nazwisko,kolumna,dane):
 
 
 #11
-def odwolaj_wizyte(imie,nazwisko,data,godzina):
+def usun_wizyte(imie,nazwisko,data,godzina):
     connection = connect()
     try:
         with connection.cursor() as cursor:
@@ -462,6 +462,44 @@ def lekarze_etat(nazwa):
             rows = cursor.fetchall()
             for row in rows:
                 print(row[0], row[1], row[2])
+
+    finally:
+        connection.close()
+
+
+#15
+def wyswietl_wszystkich():
+    connection = connect()
+    try:
+        with connection.cursor() as cursor:
+            sql = "SELECT Imie, Nazwisko, Data_urodzenia " \
+                  "FROM Pacjent " \
+                  "UNION SELECT Imie, Nazwisko, Data_urodzenia " \
+                  "FROM Pracownik " \
+                  "ORDER BY Data_urodzenia;"
+
+            cursor.execute(sql)
+            rows = cursor.fetchall()
+            for row in rows:
+                print(row[0], row[1], row[2])
+
+    finally:
+        connection.close()
+
+
+#16
+def wyszukaj_pesel(imie_pacjenta, nazwisko_pacjenta):
+    connection = connect()
+    try:
+        with connection.cursor() as cursor:
+            sql = "SELECT pacjent.Imie, pacjent.Nazwisko, pacjent.Data_urodzenia, pacjent.Pesel " \
+                  "FROM pacjent " \
+                  "WHERE pacjent.Imie = '%s' AND pacjent.Nazwisko = '%s';" % (imie_pacjenta, nazwisko_pacjenta)
+
+            cursor.execute(sql)
+            rows = cursor.fetchall()
+            for row in rows:
+                print(row[0], row[1], row[2], row[3])
 
     finally:
         connection.close()
