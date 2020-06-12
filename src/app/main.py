@@ -191,7 +191,18 @@ elif opcja == 7:
 elif opcja == 8:
     imie = input('Podaj imie pajcenta: ')
     nazwisko = input('Podaj nazwisko pacjenta: ')
-    functions.historia_wizyt(imie, nazwisko)
+
+    print('1. Cała historia pacjenta')
+    print('2. Historia pacjenta w przedziale dat')
+    wybor = int(input('Wybierz opcję 1 lub 2: '))
+
+    if wybor == 1:
+        functions.historia_wizyt(imie, nazwisko)
+    elif wybor == 2:
+        print('Podaj przedział dni w jakim szukasz wizyt pacjenta: ')
+        dzien1 = input('Podaj początek przedziału w formacie RRRR-MM-DD: ')
+        dzien2 = input('Podaj koniec przedziału w formacie RRRR-MM-DD: ')
+        functions.historia_wizyt_przedzial(imie, nazwisko, dzien1, dzien2)
 
 
 #Wyświetl wszystkie skierowania danego pacjenta
@@ -239,27 +250,9 @@ elif opcja == 11:
     godzina = input('Podaj godzinę wizyty: ')
     functions.usun_wizyte(imie,nazwisko,data,godzina)
 
-
-#Wyświetl historię wizyt pacjenta
-elif opcja == 12:
-    imie = input('Podaj imie pajcenta: ')
-    nazwisko = input('Podaj nazwisko pacjenta: ')
-
-    print('1. Cała historia pacjenta')
-    print('2. Historia pacjenta w przedziale dat')
-    wybor = int(input('Wybierz opcję 1 lub 2: '))
-
-    if wybor == 1:
-        functions.historia_wizyt(imie, nazwisko)
-    elif wybor == 2:
-        print('Podaj przedział dni w jakim szukasz wizyt pacjenta: ')
-        dzien1 = input('Podaj początek przedziału w formacie RRRR-MM-DD: ')
-        dzien2 = input('Podaj koniec przedziału w formacie RRRR-MM-DD: ')
-        functions.historia_wizyt_przedzial(imie, nazwisko, dzien1, dzien2)
-
         
 #Wyświetl zaplanowane szczepienia
-elif opcja == 13:
+elif opcja == 12:
     print('1. Wyświetl wszystkie zaplanowane szczepienia')
     print('2. Wyświetl wszystkie zaplanowane szczepienia konkretnego pacjenta')
     wybor = int(input('Wybierz opcję 1 lub 2: '))
@@ -273,7 +266,7 @@ elif opcja == 13:
 
 
 #Wyświetl wszystkich lekarzy na stażu lub na pełnym etacie
-elif opcja == 14:
+elif opcja == 13:
     print('1. Wyświetl wszystkich lekarzy na stażu')
     print('2. Wyświetl wszystkich lekarzy na pełnym etacie')
     wybor = int(input('Wybierz opcję 1 lub 2: '))
@@ -285,25 +278,24 @@ elif opcja == 14:
 
 
 #Wyświetl wszystkie osoby w bazie
-elif opcja == 15:
+elif opcja == 14:
     functions.wyswietl_wszystkich()
 
 
 #Wyszukaj pesel i datę urodzenia danego pacjenta
-elif opcja == 16:
+elif opcja == 15:
     imie_pacjenta = input('Podaj imię pacjenta: ')
     nazwisko_pacjenta = input('Podaj nazwisko pacjenta: ')
     functions.wyszukaj_pesel(imie_pacjenta, nazwisko_pacjenta)
 
 
 #Wpisz lekarzowi urlop
-elif opcja == 17:
+elif opcja == 16:
     imie = input('Podaj imię lekarza: ')
     nazwisko = input('Podaj nazwisko lekarza: ')
     functions.wpisz_urlop(imie,nazwisko)
 
 
 #Zlicz pracowników o danej funkcji
-elif opcja == 18:
+elif opcja == 17:
     functions.grupuj_zawodem()
-    

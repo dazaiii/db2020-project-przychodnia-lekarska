@@ -235,7 +235,7 @@ def dodaj_pacjenta(id_pacjenta,imie, nazwisko, data_urodzenia, pesel, miejsce_za
     try:
         with connection.cursor() as cursor:
             sql = "INSERT INTO `pacjent` (`ID_pacjenta`, `Imie`, `Nazwisko`, `Data_urodzenia`, `Pesel`, `Miejsce_zamieszkania`, " \
-                  "`Telefon`, `Mail`, `Ubezpieczenie`) VALUES(%s, '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s')," % (
+                  "`Telefon`, `Mail`, `Ubezpieczenie`) VALUES(%s, '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s')" % (
                 id_pacjenta,imie, nazwisko, data_urodzenia, pesel, miejsce_zamieszkania, telefon, mail,ubezpieczenie)
 
             cursor.execute(sql)
@@ -251,7 +251,7 @@ def dodaj_pracownika(id_pracownika,imie,nazwisko,data_urodzenia,pesel,miejsce_za
         with connection.cursor() as cursor:
             sql = "INSERT INTO `pracownik` (`ID_pracownika`, `Imie`, `Nazwisko`, `Data_urodzenia`, `Pesel`, " \
                   "`Miejsce_zamieszkania`, `Telefon`, `Mail`, `Funkcja`) " \
-                  "VALUES (%s, '%s', '%s', '%s', '%s', '%s', %s, '%s', '%s')," % (
+                  "VALUES (%s, '%s', '%s', '%s', '%s', '%s', %s, '%s', '%s')" % (
                 id_pracownika,imie,nazwisko,data_urodzenia,pesel,miejsce_zamieszkania,telefon,mail,funkcja)
 
             cursor.execute(sql)
@@ -334,6 +334,24 @@ def historia_wizyt(imie,nazwisko):
     finally:
         connection.close()
 
+#8
+def historia_wizyt_przedzial(imie, nazwisko, dzien1, dzien2):
+    connection = connect()
+    try:
+        with connection.cursor() as cursor:
+            sql = "SELECT pacjent.Imie, pacjent.Nazwisko, wizyta.Data_wizyty, wizyta.Godzina_wizyty FROM pacjent  " \
+                  "INNER JOIN wizyta ON wizyta.ID_pacjenta = pacjent.ID_pacjenta " \
+                  "WHERE pacjent.Imie = '%s' AND pacjent.Nazwisko = '%s' AND Data_wizyty BETWEEN '%s' AND '%s'" \
+                  "ORDER BY Wizyta.Data_wizyty ASC, Wizyta.Godzina_wizyty ASC;" % (imie,nazwisko,dzien1,dzien2)
+
+            cursor.execute(sql)
+            rows = cursor.fetchall()
+            for row in rows:
+                print(row[0], row[1], row[2], row[3])
+
+    finally:
+        connection.close()
+
 
 #9
 def wyszukaj_skierowania(imie_pacjenta, nazwisko_pacjenta):
@@ -392,25 +410,9 @@ def usun_wizyte(imie,nazwisko,data,godzina):
         connection.close()
 
 
+
+
 #12
-def historia_wizyt_przedzial(imie, nazwisko, dzien1, dzien2):
-    connection = connect()
-    try:
-        with connection.cursor() as cursor:
-            sql = "SELECT pacjent.Imie, pacjent.Nazwisko, wizyta.Data_wizyty, wizyta.Godzina_wizyty FROM pacjent  " \
-                  "INNER JOIN wizyta ON wizyta.ID_pacjenta = pacjent.ID_pacjenta " \
-                  "WHERE pacjent.Imie = '%s' AND pacjent.Nazwisko = '%s' AND Data_wizyty BETWEEN '%s' AND '%s'" \
-                  "ORDER BY Wizyta.Data_wizyty ASC, Wizyta.Godzina_wizyty ASC;" % (imie,nazwisko,dzien1,dzien2)
-
-            cursor.execute(sql)
-            rows = cursor.fetchall()
-            for row in rows:
-                print(row[0], row[1], row[2], row[3])
-
-    finally:
-        connection.close()
-
-#13
 def szczepienia():
     connection = connect()
     try:
@@ -430,7 +432,7 @@ def szczepienia():
     finally:
         connection.close()
 
-#13
+#12
 def szczepienia_pacjenta(imie_pacjenta, nazwisko_pacjenta):
     connection = connect()
     try:
@@ -450,7 +452,7 @@ def szczepienia_pacjenta(imie_pacjenta, nazwisko_pacjenta):
     finally:
         connection.close()
 
-#14
+#13
 def lekarze_etat(nazwa):
     connection = connect()
     try:
@@ -467,7 +469,7 @@ def lekarze_etat(nazwa):
         connection.close()
 
 
-#15
+#14
 def wyswietl_wszystkich():
     connection = connect()
     try:
@@ -487,7 +489,7 @@ def wyswietl_wszystkich():
         connection.close()
 
 
-#16
+#15
 def wyszukaj_pesel(imie_pacjenta, nazwisko_pacjenta):
     connection = connect()
     try:
@@ -505,7 +507,7 @@ def wyszukaj_pesel(imie_pacjenta, nazwisko_pacjenta):
         connection.close()
 
 
-#17
+#16
 def wpisz_urlop(imie,nazwisko):
     connection = connect()
     try:
@@ -519,7 +521,7 @@ def wpisz_urlop(imie,nazwisko):
         connection.close()
 
 
-#18
+#17
 def grupuj_zawodem():
     connection = connect()
     try:
