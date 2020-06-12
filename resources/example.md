@@ -15,12 +15,14 @@ Baza danych składa się z 7 encji:
 - Pracownik
 - Lekarz
 - Gabinet
+  
 Połączenie tabel odpowiednimi relacjami pozwoliło na łączenie różnych zapytań. Dzięki temu stworzono funkcjonalności przydatne w zarządzaniu przychodnią lekarską.
-
+  
 Schemat bazy danych:
-![Przychodnia](Przychodnia lekarska.svg)
-
+![Przychodnia]("Przychodnia lekarska.svg")
+  
 Przykładowe zapytania tworzące:
+  
 Tworzenie tabel "Pacjent", "Pracownik", "Lekarz" i "Wizyta"
 ```sql
 CREATE TABLE pacjent (
@@ -99,6 +101,7 @@ VALUES(1, 'Badanie', 1, 2, 1, '2020-06-08', '10:00:00');
 
 ## Implementacja zapytań SQL
 1. Zarejestruj pacjenta
+  
 a) Sprawdzenie czy pacjent posiada ubezpieczenie (gdy nie posiada, nie może zarejestrować się do lekarza) oraz jego ID w bazie
 ```sql
 SELECT ubezpieczenie , ID_pacjenta FROM Pacjent WHERE Imie='%s' AND Nazwisko='%s'
@@ -124,7 +127,8 @@ e) Wstawienie danych do tabeli wizyta
 ```sql
 INSERT INTO wizyta VALUES(%s, '%s', %s, %s, %s, '%s', '%s');
 ```
-
+  
+    
 2. Wyświetlenie recepty pacjenta
 ```sql
 SELECT pacjent.`Imie`, pacjent.`Nazwisko`, wizyta.`ID_pacjenta`,
@@ -133,7 +137,8 @@ FROM pacjent  LEFT JOIN wizyta ON wizyta.`ID_pacjenta` = pacjent.`ID_pacjenta`
 LEFT JOIN recepta ON recepta.`ID_wizyty` = wizyta.`ID_wizyty`
 WHERE pacjent.`Imie` = '%s' AND pacjent.`Nazwisko` = '%s';
 ```
-
+  
+    
 3. Wypisz wszystkich lekarzy na urlopie/nie na urlopie w kolejności alfabetycznej 
 ```sql
 SELECT pracownik.Imie, pracownik.Nazwisko, lekarz.Urlop
@@ -141,8 +146,10 @@ FROM pracownik  INNER JOIN lekarz ON lekarz.ID_pracownika = pracownik.ID_pracown
 WHERE lekarz.Urlop = '%s'
 ORDER BY Pracownik.Nazwisko ASC, Pracownik.Imie ASC;
 ```
-
+  
+    
 4. Wyświtlenie danych kontaktowych
+  
 4.1 Wyświetlenie danych kontaktowych wszystkich lekarzy lub pacjentów 
 ```sql
 SELECT Imie, Nazwisko, Telefon, Mail FROM %s;
@@ -152,8 +159,10 @@ SELECT Imie, Nazwisko, Telefon, Mail FROM %s;
 SELECT Imie, Nazwisko, Telefon, Mail FROM %s
 WHERE Imie = '%s' AND Nazwisko = '%s';
 ```
-
+  
+    
 5. Wyświetlenie godzin przyjęć lekarzy
+  
 5.1 Wyświetlenie godzin przyjęć wszystkich lekarzy
 ```sql
 SELECT pracownik.Imie, pracownik.Nazwisko, lekarz.ID_pracownika, gabinet.Godzina_rozpoczecia, gabinet.Godzina_zakonczenia
@@ -168,8 +177,10 @@ FROM pracownik  INNER JOIN lekarz ON lekarz.ID_pracownika = pracownik.ID_pracown
 INNER JOIN gabinet ON gabinet.ID_pracownika = lekarz.ID_pracownika
 WHERE pracownik.Imie = '%s' AND pracownik.Nazwisko = '%s';
 ```
-
+  
+    
 6. Dodanie osoby do bazy
+  
 a) Obliczenie ilości osób w tabeli Pracownik lub w tabeli Pacjent
 ```sql
 SELECT COUNT(*) FROM %s;
@@ -177,14 +188,16 @@ SELECT COUNT(*) FROM %s;
 b) Dodanie danych do odpowiedniej tabeli, czyli Pracownik lub Pacjent
 ```sql
 INSERT INTO pracownik (ID_pracownika, Imie, Nazwisko, Data_urodzenia, Pesel,
-Miejsce_zamieszkania`, Telefon, Mail, Funkcja)
+Miejsce_zamieszkania, Telefon, Mail, Funkcja)
 VALUES (%s, '%s', '%s', '%s', '%s', '%s', %s, '%s', '%s');
 
 INSERT INTO pacjent (ID_pacjenta, Imie, Nazwisko, Data_urodzenia, Pesel, Miejsce_zamieszkania,
 Telefon, Mail, Ubezpieczenie) VALUES(%s, '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s');
 ```
-
+  
+    
 7. Wyświetlenie wizyt
+  
 7.1 Wyświetlenie wszystkich wizyt posortowanych rosnąco po dacie
 ```sql
 SELECT pracownik.Imie, pracownik.Nazwisko, wizyta.Data_wizyty, wizyta.Godzina_wizyty, gabinet.Nr_gabinetu
@@ -206,8 +219,10 @@ FROM gabinet
 LEFT JOIN wizyta ON wizyta.ID_gabinetu = gabinet.ID_gabinetu
 LEFT JOIN pacjent ON wizyta.ID_pacjenta = pacjent.ID_pacjenta WHERE gabinet.Nr_gabinetu = '%s';
 ```
-
+  
+    
 8. Wyświetlenie historii wizyt pacjenta 
+  
 8.1 Posortowanych po dacie wizyty
 ```sql
 SELECT pacjent.Imie, pacjent.Nazwisko, wizyta.Data_wizyty, wizyta.Godzina_wizyty FROM pacjent
@@ -222,7 +237,8 @@ INNER JOIN wizyta ON wizyta.ID_pacjenta = pacjent.ID_pacjenta
 WHERE pacjent.Imie = '%s' AND pacjent.Nazwisko = '%s' AND Data_wizyty BETWEEN '%s' AND '%s'
 ORDER BY Wizyta.Data_wizyty ASC, Wizyta.Godzina_wizyty ASC;
 ```
-
+  
+    
 9. Wyświetlenie wszystkich skierowań danego pacjenta
 ```sql
 SELECT pacjent.Imie, pacjent.Nazwisko, wizyta.ID_pacjenta, skierowanie.ID_skierowania, skierowanie.Typ
@@ -231,13 +247,16 @@ INNER JOIN wizyta ON wizyta.ID_pacjenta = pacjent.ID_pacjenta
 INNER JOIN skierowanie ON skierowanie.ID_wizyty = wizyta.ID_wizyty
 WHERE pacjent.Imie = '%s' AND pacjent.Nazwisko = '%s';
 ```
-
+  
+    
 10. Modyfikacja danych kontaktowych pracownika lub pacjenta
 ```sql
 UPDATE %s SET %s = '%s' WHERE Imie = '%s' AND Nazwisko = '%s';
 ```
-
+  
+    
 11. Usuń wizytę z bazy - w razie gdyby ktoś chciał odwołać wizytę lub gdyby pacjent już nie był w tej przychodni i należałoby usunąć jego dane
+  
 a) Sprawdzenie ID wizyty
 ```sql
 SELECT ID_wizyty FROM wizyta WHERE id_pacjenta = (SELECT ID_pacjenta FROM pacjent WHERE Imie = '%s'
@@ -255,8 +274,10 @@ d) Usunięcie wizyty
 ```sql
 DELETE FROM Wizyta WHERE ID_wizyty = '%s';
 ```
-
+  
+    
 12. Wyświetlenie zaplanowanych szczepień
+  
 12.1 Wyświetlenie wszystkich zaplanowanych szczepień
 ```sql
 SELECT wizyta.Typ, pacjent.Imie, pacjent.Nazwisko, wizyta.Data_wizyty, wizyta.Godzina_wizyty, gabinet.Nr_gabinetu
@@ -275,13 +296,15 @@ INNER JOIN gabinet ON wizyta.ID_gabinetu = gabinet.ID_gabinetu
 WHERE wizyta.Typ = 'szczepienie' AND pacjent.Imie = '%s' AND pacjent.Nazwisko = '%s'
 ORDER BY Wizyta.Data_wizyty ASC, Wizyta.Godzina_wizyty ASC;
 ```
-
+  
+    
 13. Wyświetlenie wszystkich lekarzy na stażu lub na pełnym etacie
 ```sql
 SELECT pracownik.Imie, pracownik.Nazwisko, lekarz.Etat FROM pracownik
 INNER JOIN lekarz ON lekarz.ID_pracownika = pracownik.ID_pracownika WHERE lekarz.Etat = '%s';
 ```
-
+  
+    
 14. Wyświetlenie wszystkich osób w bazie
 ```sql
 SELECT Imie, Nazwisko, Data_urodzenia
@@ -290,20 +313,23 @@ UNION SELECT Imie, Nazwisko, Data_urodzenia
 FROM Pracownik
 ORDER BY Data_urodzenia;
 ```
-
+  
+    
 15. Wyszukaj numer PESEL i datę urodzenia konkretnego pacjenta
 ```sql
 SELECT pacjent.Imie, pacjent.Nazwisko, pacjent.Data_urodzenia, pacjent.Pesel
 FROM pacjent
 WHERE pacjent.Imie = '%s' AND pacjent.Nazwisko = '%s';
 ```
-
+  
+    
 16. Wpisanie urlopu lekarzowi
 ```sql
 UPDATE Lekarz SET Lekarz.urlop = 1 WHERE (SELECT ID_pracownika from Pracownik WHERE Pracownik.Imie
 = '%s' AND Pracownik.Nazwisko = '%s') = ID_pracownika;
 ```
-
+  
+    
 17. Zliczenie pracowników o danej funkcji tj. lekarzy, pielęgniarek i recepcjonistek
 ```sql
 SELECT Pracownik.Funkcja AS 'Zawod pracownika',
@@ -312,7 +338,8 @@ FROM Pracownik
 GROUP BY Pracownik.Funkcja
 ORDER BY Pracownik.Funkcja ASC;
 ```
-
+  
+    
 ## Aplikacja
 Tutaj należy opisać aplikację, która wykorzystuje zapytania SQL z poprzedniego kroku. Można, jednak nie jest to konieczne, wrzucić tutaj istotne snippety z Waszych aplikacji.
 
