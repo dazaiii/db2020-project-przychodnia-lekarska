@@ -19,6 +19,8 @@ print('13. Wyświetl zaplanowane szczepienia')
 print('14. Wyświetl wszystkich lekarzy na stażu lub na pełnym etacie')
 print('15. Wyświetl wszystkie osoby w bazie')
 print('16. Wyszukaj pesel i datę urodzenia danego pacjenta')
+print('17. Wpisz lekarzowi urlop')
+print('18. Zlicz pracowników o danej funkcji')
 
 opcja = int(input('Wybierz opcje: '))
 print(opcja)
@@ -292,3 +294,16 @@ elif opcja == 16:
     imie_pacjenta = input('Podaj imię pacjenta: ')
     nazwisko_pacjenta = input('Podaj nazwisko pacjenta: ')
     functions.wyszukaj_pesel(imie_pacjenta, nazwisko_pacjenta)
+
+
+#Wpisz lekarzowi urlop
+elif opcja == 17:
+    imie = input('Podaj imię lekarza: ')
+    nazwisko = input('Podaj nazwisko lekarza: ')
+    functions.wpisz_urlop(imie,nazwisko)
+
+
+#Zlicz pracowników o danej funkcji
+elif opcja == 18:
+    functions.grupuj_zawodem()
+    

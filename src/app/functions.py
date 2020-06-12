@@ -503,3 +503,37 @@ def wyszukaj_pesel(imie_pacjenta, nazwisko_pacjenta):
 
     finally:
         connection.close()
+
+
+#17
+def wpisz_urlop(imie,nazwisko):
+    connection = connect()
+    try:
+        with connection.cursor() as cursor:
+            sql = "UPDATE Lekarz SET Lekarz.urlop = 1 WHERE (SELECT ID_pracownika from Pracownik WHERE Pracownik.Imie " \
+                  "= '%s' AND Pracownik.Nazwisko = '%s') = ID_pracownika;" % (imie,nazwisko)
+            cursor.execute(sql)
+            connection.commit()
+
+    finally:
+        connection.close()
+
+
+#18
+def grupuj_zawodem():
+    connection = connect()
+    try:
+        with connection.cursor() as cursor:
+            sql = "SELECT Pracownik.Funkcja AS 'Zawod pracownika', " \
+                  "COUNT(Pracownik.funkcja) AS 'Ilosc pracownikow' " \
+                  "FROM Pracownik " \
+                  "GROUP BY Pracownik.Funkcja " \
+                  "ORDER BY Pracownik.Funkcja ASC;"
+
+            cursor.execute(sql)
+            rows = cursor.fetchall()
+            for row in rows:
+                print(row[0], row[1])
+
+    finally:
+        connection.close()
