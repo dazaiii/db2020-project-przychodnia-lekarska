@@ -316,6 +316,8 @@ VALUES(2, 'Ibupm', 'Doustnie', 2);
 INSERT INTO `recepta` (`ID_recepty`, `Nazwa_lekarstwa`, `Sposob_podania`, `ID_wizyty`)
 VALUES(3, 'Nurofen', 'Doustnie', 3);
 INSERT INTO `recepta` (`ID_recepty`, `Nazwa_lekarstwa`, `Sposob_podania`, `ID_wizyty`)
+VALUES(4, 'Apap', 'Doustnie', 5);
+INSERT INTO `recepta` (`ID_recepty`, `Nazwa_lekarstwa`, `Sposob_podania`, `ID_wizyty`)
 VALUES(5, 'Anpan', 'Doustnie', 4);
 INSERT INTO `recepta` (`ID_recepty`, `Nazwa_lekarstwa`, `Sposob_podania`, `ID_wizyty`)
 VALUES(6, 'Fenistil', 'Maść', 6);
