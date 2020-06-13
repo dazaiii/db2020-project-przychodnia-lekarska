@@ -20,6 +20,7 @@ if wybor == 1:
     print('10. Wyświetl wszystkie osoby w bazie')
     print('11. Wyszukaj pesel i datę urodzenia danego pacjenta')
     print('12. Zlicz pracowników o danej funkcji')
+    print('13. Zlicz lekarzy danej specjalizacji')
 
     opcja = int(input('Wybierz opcje: '))
     print(opcja)
@@ -180,6 +181,18 @@ if wybor == 1:
     #Zlicz pracowników o danej funkcji
     elif opcja == 12:
         functions.grupuj_zawodem()
+
+    #Zlicz lekarzy danej specjalizacji
+    elif opcja == 13:
+        print('1. Zlicz lekarzy wszystkich specjalizacji')
+        print('2. Zlicz lekarzy konkretnej specjalizacji')
+        wybor = int(input('Wybierz opcję 1 lub 2: '))
+
+        if wybor == 1:
+            functions.zlicz_lekarzy()
+        elif wybor == 2:
+            specjalizacja = input('Podaj specjalizację lekarską: ')
+            functions.zlicz_lekarzy_specjalizacji(specjalizacja)
     
 
 elif wybor == 2:

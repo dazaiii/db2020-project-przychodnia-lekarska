@@ -353,6 +353,42 @@ def grupuj_zawodem():
     finally:
         connection.close()
 
+#1.13
+def zlicz_lekarzy():
+    connection = connect()
+    try:
+        with connection.cursor() as cursor:
+            sql = "SELECT Lekarz.Specjalizacja, COUNT(Lekarz.Specjalizacja) AS 'Ilość' " \
+                  "FROM Lekarz " \
+                  "GROUP BY Lekarz.Specjalizacja " \
+                  "ORDER BY Lekarz.Specjalizacja ASC;"
+
+            cursor.execute(sql)
+            rows = cursor.fetchall()
+            for row in rows:
+                print(row[0], row[1])
+
+    finally:
+        connection.close()
+
+#1.13
+def zlicz_lekarzy_specjalizacji(specjalizacja):
+    connection = connect()
+    try:
+        with connection.cursor() as cursor:
+            sql = "SELECT Lekarz.Specjalizacja, COUNT(Lekarz.Specjalizacja) AS 'Ilość' " \
+                  "FROM Lekarz " \
+                  "WHERE Lekarz.Specjalizacja = '%s'" \
+                  "GROUP BY Lekarz.Specjalizacja " \
+                  "ORDER BY Lekarz.Specjalizacja ASC;" % (specjalizacja)
+
+            cursor.execute(sql)
+            rows = cursor.fetchall()
+            for row in rows:
+                print(row[0], row[1])
+
+    finally:
+        connection.close()
 
 #2.1
 def ubezpieczenie(imie, nazwisko):
