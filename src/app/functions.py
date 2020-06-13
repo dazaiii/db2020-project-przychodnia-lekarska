@@ -12,93 +12,7 @@ def connect():
     return connection
 
 
-
-#1
-def ubezpieczenie(imie, nazwisko):
-    connection = connect()
-    try:
-        with connection.cursor() as cursor:
-            sql = "SELECT ubezpieczenie , ID_pacjenta FROM Pacjent WHERE Imie='%s' AND Nazwisko='%s'" % (imie, nazwisko)
-            cursor.execute(sql)
-            result = cursor.fetchone()
-            # print(result)
-    finally:
-        connection.close()
-        return result  # result[0] zwraca informację czy pacjent ma ubezpieczenie, result[1] ID_pacjenta
-
-
-
-#1
-def urlop(imie_lekarza, nazwisko_lekarza):
-    connection = connect()
-    try:
-        with connection.cursor() as cursor:
-            sql = "SELECT `lekarz`.`Urlop`, `gabinet`.`ID_pracownika`, `gabinet`.`ID_gabinetu` FROM `pracownik` " \
-                  "INNER JOIN `lekarz` ON `lekarz`.`ID_pracownika` = `pracownik`.`ID_pracownika`" \
-                  "INNER JOIN `gabinet` ON `gabinet`.`ID_pracownika` = `lekarz`.`ID_pracownika`" \
-                  "WHERE `pracownik`.`Imie` = '%s' AND `pracownik`.`Nazwisko` = '%s';" % (
-                      imie_lekarza, nazwisko_lekarza)
-
-            cursor.execute(sql)
-            result = cursor.fetchone()
-            # print(result)
-    finally:
-        connection.close()
-        return result  # result[0] oznacza czy lekarz jest na urlopie, result[1] to jego ID, result[2] ID_gabinetu w którym przyjmuje
-
-
-
-#1
-def dostepnosc_gabinetu(id_pracownika, godzina, data):
-    connection = connect()
-    try:
-        with connection.cursor() as cursor:
-            sql = "SELECT COUNT(`wizyta`.`ID_pracownika`) FROM `wizyta`" \
-                  "WHERE `wizyta`.`ID_pracownika` = '%s' AND `wizyta`.`Godzina_wizyty` = '%s' AND " \
-                  "`wizyta`.`Data_wizyty` = '%s';" \
-                  % (id_pracownika, godzina, data)
-
-            cursor.execute(sql)
-            result = cursor.fetchone()
-            #print(result)
-    finally:
-        connection.close()
-        return int(result[0])
-
-
-
-#1
-def ID_wizyty():
-    connection = connect()
-    try:
-        with connection.cursor() as cursor:
-            sql = "SELECT COUNT(ID_wizyty) FROM Wizyta;"
-            cursor.execute(sql)
-            result = cursor.fetchone()
-            id_wizyty = int(result[0]) + 1
-    finally:
-        connection.close()
-        return id_wizyty
-
-
-
-#1
-def zarejestruj(typ, id_pracownika, id_pacjenta, id_gabinetu, data, godzina):
-    connection = connect()
-    try:
-        with connection.cursor() as cursor:
-            id_wizyty = ID_wizyty()
-            print(id_wizyty, typ, id_pracownika, id_pacjenta, id_gabinetu, data, godzina)
-            sql = "INSERT INTO `wizyta` VALUES(%s, '%s', %s, %s, %s, '%s', '%s');" % (
-                id_wizyty, typ, id_pracownika, id_pacjenta, id_gabinetu, data, godzina)
-            cursor.execute(sql)
-            connection.commit()
-    finally:
-        connection.close()
-
-
-
-#2
+#1.1
 def recepta(imie, nazwisko):
     connection = connect()
     try:
@@ -118,7 +32,7 @@ def recepta(imie, nazwisko):
 
 
 
-#3
+#1.2
 def na_urlopie(wybor):
     connection = connect()
     try:
@@ -137,7 +51,7 @@ def na_urlopie(wybor):
         connection.close()
 
 
-#4 dane kontaktowe wielu osób
+#1.3 dane kontaktowe wielu osób
 def dane_kontaktowe(tabela):
     connection = connect()
     try:
@@ -154,7 +68,7 @@ def dane_kontaktowe(tabela):
         connection.close()
 
 
-#4 dane kontaktowe jednej osoby
+#1.3 dane kontaktowe jednej osoby
 def dane_kontaktowe_1(tabela,imie, nazwisko):
     connection = connect()
     try:
@@ -173,7 +87,7 @@ def dane_kontaktowe_1(tabela,imie, nazwisko):
 
 
 
-#5
+#1.4
 def godziny_przyjec():
     connection = connect()
     try:
@@ -193,7 +107,7 @@ def godziny_przyjec():
 
 
 
-#5
+#1.4
 def godziny_przyjec_lekarza(imie_lekarza, nazwisko_lekarza):
     connection = connect()
     try:
@@ -212,55 +126,7 @@ def godziny_przyjec_lekarza(imie_lekarza, nazwisko_lekarza):
         connection.close()
 
 
-
-
-#6
-def id_osoby(tabela):
-    connection = connect()
-    try:
-        with connection.cursor() as cursor:
-            sql = "SELECT COUNT(*) FROM %s;" % (tabela)
-            cursor.execute(sql)
-            result = cursor.fetchone()
-            print(result)
-            id_os = int(result[0]) + 1
-    finally:
-        connection.close()
-        return id_os
-
-
-#6
-def dodaj_pacjenta(id_pacjenta,imie, nazwisko, data_urodzenia, pesel, miejsce_zamieszkania, telefon, mail,ubezpieczenie):
-    connection = connect()
-    try:
-        with connection.cursor() as cursor:
-            sql = "INSERT INTO `pacjent` (`ID_pacjenta`, `Imie`, `Nazwisko`, `Data_urodzenia`, `Pesel`, `Miejsce_zamieszkania`, " \
-                  "`Telefon`, `Mail`, `Ubezpieczenie`) VALUES(%s, '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s')" % (
-                id_pacjenta,imie, nazwisko, data_urodzenia, pesel, miejsce_zamieszkania, telefon, mail,ubezpieczenie)
-
-            cursor.execute(sql)
-            connection.commit()
-    finally:
-        connection.close()
-
-
-#6
-def dodaj_pracownika(id_pracownika,imie,nazwisko,data_urodzenia,pesel,miejsce_zamieszkania,telefon,mail,funkcja):
-    connection = connect()
-    try:
-        with connection.cursor() as cursor:
-            sql = "INSERT INTO `pracownik` (`ID_pracownika`, `Imie`, `Nazwisko`, `Data_urodzenia`, `Pesel`, " \
-                  "`Miejsce_zamieszkania`, `Telefon`, `Mail`, `Funkcja`) " \
-                  "VALUES (%s, '%s', '%s', '%s', '%s', '%s', %s, '%s', '%s')" % (
-                id_pracownika,imie,nazwisko,data_urodzenia,pesel,miejsce_zamieszkania,telefon,mail,funkcja)
-
-            cursor.execute(sql)
-            connection.commit()
-    finally:
-        connection.close()
-
-
-#7
+#1.5
 def wyswietl_wizyty():
     connection = connect()
     try:
@@ -279,7 +145,7 @@ def wyswietl_wizyty():
         connection.close()
 
 
-#7
+#1.5
 def wizyty_lekarza_w_dniu(imie_lekarza, nazwisko_lekarza, dzien):
     connection = connect()
     try:
@@ -298,7 +164,7 @@ def wizyty_lekarza_w_dniu(imie_lekarza, nazwisko_lekarza, dzien):
         connection.close()
 
 
-#7
+#1.5
 def wizyty_gabinet(nr_gabinetu):
     connection = connect()
     try:
@@ -317,7 +183,7 @@ def wizyty_gabinet(nr_gabinetu):
         connection.close()
 
 
-#8
+#1.6
 def historia_wizyt(imie,nazwisko):
     connection = connect()
     try:
@@ -334,7 +200,7 @@ def historia_wizyt(imie,nazwisko):
     finally:
         connection.close()
 
-#8
+#1.6
 def historia_wizyt_przedzial(imie, nazwisko, dzien1, dzien2):
     connection = connect()
     try:
@@ -353,7 +219,7 @@ def historia_wizyt_przedzial(imie, nazwisko, dzien1, dzien2):
         connection.close()
 
 
-#9
+#1.7
 def wyszukaj_skierowania(imie_pacjenta, nazwisko_pacjenta):
     connection = connect()
     try:
@@ -373,46 +239,7 @@ def wyszukaj_skierowania(imie_pacjenta, nazwisko_pacjenta):
         connection.close()
 
 
-#10
-def modyfikuj_dane_kontaktowe(tabela,imie,nazwisko,kolumna,dane):
-    connection = connect()
-    try:
-        with connection.cursor() as cursor:
-            sql = "UPDATE %s SET %s = '%s' WHERE Imie = '%s' AND Nazwisko = '%s'" % (tabela, kolumna, dane, imie, nazwisko)
-
-            cursor.execute(sql)
-            connection.commit()
-    finally:
-        connection.close()
-
-
-#11
-def usun_wizyte(imie,nazwisko,data,godzina):
-    connection = connect()
-    try:
-        with connection.cursor() as cursor:
-            sql = "Select ID_wizyty FROM wizyta WHERE id_pacjenta = (SELECT ID_pacjenta FROM pacjent WHERE Imie = '%s' " \
-                  "AND Nazwisko = '%s') AND Data_wizyty = '%s' AND Godzina_wizyty = '%s';" % (imie, nazwisko,data,godzina)
-            cursor.execute(sql)
-            id_wizyty = cursor.fetchone()
-            id_wizyty = int(id_wizyty[0])
-
-            sql = "DELETE FROM Skierowanie WHERE ID_wizyty = '%s'" % (id_wizyty)
-            cursor.execute(sql)
-            sql = "DELETE FROM Recepta WHERE ID_wizyty = '%s'" % (id_wizyty)
-            cursor.execute(sql)
-            sql = "DELETE FROM Wizyta WHERE ID_wizyty = '%s'" % (id_wizyty)
-            cursor.execute(sql)
-
-            connection.commit()
-
-    finally:
-        connection.close()
-
-
-
-
-#12
+#1.8
 def szczepienia():
     connection = connect()
     try:
@@ -432,7 +259,7 @@ def szczepienia():
     finally:
         connection.close()
 
-#12
+#1.8
 def szczepienia_pacjenta(imie_pacjenta, nazwisko_pacjenta):
     connection = connect()
     try:
@@ -452,7 +279,7 @@ def szczepienia_pacjenta(imie_pacjenta, nazwisko_pacjenta):
     finally:
         connection.close()
 
-#13
+#1.9
 def lekarze_etat(nazwa):
     connection = connect()
     try:
@@ -469,7 +296,7 @@ def lekarze_etat(nazwa):
         connection.close()
 
 
-#14
+#1.10
 def wyswietl_wszystkich():
     connection = connect()
     try:
@@ -489,7 +316,7 @@ def wyswietl_wszystkich():
         connection.close()
 
 
-#15
+#1.11
 def wyszukaj_pesel(imie_pacjenta, nazwisko_pacjenta):
     connection = connect()
     try:
@@ -507,21 +334,7 @@ def wyszukaj_pesel(imie_pacjenta, nazwisko_pacjenta):
         connection.close()
 
 
-#16
-def wpisz_urlop(imie,nazwisko):
-    connection = connect()
-    try:
-        with connection.cursor() as cursor:
-            sql = "UPDATE Lekarz SET Lekarz.urlop = 1 WHERE (SELECT ID_pracownika from Pracownik WHERE Pracownik.Imie " \
-                  "= '%s' AND Pracownik.Nazwisko = '%s') = ID_pracownika;" % (imie,nazwisko)
-            cursor.execute(sql)
-            connection.commit()
-
-    finally:
-        connection.close()
-
-
-#17
+#1.12
 def grupuj_zawodem():
     connection = connect()
     try:
@@ -536,6 +349,266 @@ def grupuj_zawodem():
             rows = cursor.fetchall()
             for row in rows:
                 print(row[0], row[1])
+
+    finally:
+        connection.close()
+
+
+#2.1
+def ubezpieczenie(imie, nazwisko):
+    connection = connect()
+    try:
+        with connection.cursor() as cursor:
+            sql = "SELECT ubezpieczenie , ID_pacjenta FROM Pacjent WHERE Imie='%s' AND Nazwisko='%s'" % (imie, nazwisko)
+            cursor.execute(sql)
+            result = cursor.fetchone()
+            # print(result)
+    finally:
+        connection.close()
+        return result  # result[0] zwraca informację czy pacjent ma ubezpieczenie, result[1] ID_pacjenta
+
+
+
+#2.1
+def urlop(imie_lekarza, nazwisko_lekarza):
+    connection = connect()
+    try:
+        with connection.cursor() as cursor:
+            sql = "SELECT `lekarz`.`Urlop`, `gabinet`.`ID_pracownika`, `gabinet`.`ID_gabinetu` FROM `pracownik` " \
+                  "INNER JOIN `lekarz` ON `lekarz`.`ID_pracownika` = `pracownik`.`ID_pracownika`" \
+                  "INNER JOIN `gabinet` ON `gabinet`.`ID_pracownika` = `lekarz`.`ID_pracownika`" \
+                  "WHERE `pracownik`.`Imie` = '%s' AND `pracownik`.`Nazwisko` = '%s';" % (
+                      imie_lekarza, nazwisko_lekarza)
+
+            cursor.execute(sql)
+            result = cursor.fetchone()
+            # print(result)
+    finally:
+        connection.close()
+        return result  # result[0] oznacza czy lekarz jest na urlopie, result[1] to jego ID, result[2] ID_gabinetu w którym przyjmuje
+
+
+
+#2.1
+def dostepnosc_gabinetu(id_pracownika, godzina, data):
+    connection = connect()
+    try:
+        with connection.cursor() as cursor:
+            sql = "SELECT COUNT(`wizyta`.`ID_pracownika`) FROM `wizyta`" \
+                  "WHERE `wizyta`.`ID_pracownika` = '%s' AND `wizyta`.`Godzina_wizyty` = '%s' AND " \
+                  "`wizyta`.`Data_wizyty` = '%s';" \
+                  % (id_pracownika, godzina, data)
+
+            cursor.execute(sql)
+            result = cursor.fetchone()
+            #print(result)
+    finally:
+        connection.close()
+        return int(result[0])
+
+
+
+#2.1
+def ID_wizyty():
+    connection = connect()
+    try:
+        with connection.cursor() as cursor:
+            sql = "SELECT COUNT(ID_wizyty) FROM Wizyta;"
+            cursor.execute(sql)
+            result = cursor.fetchone()
+            id_wizyty = int(result[0]) + 1
+    finally:
+        connection.close()
+        return id_wizyty
+
+
+
+#2.1
+def zarejestruj(typ, id_pracownika, id_pacjenta, id_gabinetu, data, godzina):
+    connection = connect()
+    try:
+        with connection.cursor() as cursor:
+            id_wizyty = ID_wizyty()
+            print(id_wizyty, typ, id_pracownika, id_pacjenta, id_gabinetu, data, godzina)
+            sql = "INSERT INTO `wizyta` VALUES(%s, '%s', %s, %s, %s, '%s', '%s');" % (
+                id_wizyty, typ, id_pracownika, id_pacjenta, id_gabinetu, data, godzina)
+            cursor.execute(sql)
+            connection.commit()
+    finally:
+        connection.close()
+
+
+#2.2
+def id_osoby(tabela):
+    connection = connect()
+    try:
+        with connection.cursor() as cursor:
+            sql = "SELECT COUNT(*) FROM %s;" % (tabela)
+            cursor.execute(sql)
+            result = cursor.fetchone()
+            print(result)
+            id_os = int(result[0]) + 1
+    finally:
+        connection.close()
+        return id_os
+
+
+#2.2
+def dodaj_pacjenta(id_pacjenta,imie, nazwisko, data_urodzenia, pesel, miejsce_zamieszkania, telefon, mail,ubezpieczenie):
+    connection = connect()
+    try:
+        with connection.cursor() as cursor:
+            sql = "INSERT INTO `pacjent` (`ID_pacjenta`, `Imie`, `Nazwisko`, `Data_urodzenia`, `Pesel`, `Miejsce_zamieszkania`, " \
+                  "`Telefon`, `Mail`, `Ubezpieczenie`) VALUES(%s, '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s')" % (
+                id_pacjenta,imie, nazwisko, data_urodzenia, pesel, miejsce_zamieszkania, telefon, mail,ubezpieczenie)
+
+            cursor.execute(sql)
+            connection.commit()
+    finally:
+        connection.close()
+
+
+#2.2
+def dodaj_pracownika(id_pracownika,imie,nazwisko,data_urodzenia,pesel,miejsce_zamieszkania,telefon,mail,funkcja):
+    connection = connect()
+    try:
+        with connection.cursor() as cursor:
+            sql = "INSERT INTO `pracownik` (`ID_pracownika`, `Imie`, `Nazwisko`, `Data_urodzenia`, `Pesel`, " \
+                  "`Miejsce_zamieszkania`, `Telefon`, `Mail`, `Funkcja`) " \
+                  "VALUES (%s, '%s', '%s', '%s', '%s', '%s', %s, '%s', '%s')" % (
+                id_pracownika,imie,nazwisko,data_urodzenia,pesel,miejsce_zamieszkania,telefon,mail,funkcja)
+
+            cursor.execute(sql)
+            connection.commit()
+    finally:
+        connection.close()
+
+#2.3
+def modyfikuj_dane_kontaktowe(tabela,imie,nazwisko,kolumna,dane):
+    connection = connect()
+    try:
+        with connection.cursor() as cursor:
+            sql = "UPDATE %s SET %s = '%s' WHERE Imie = '%s' AND Nazwisko = '%s'" % (tabela, kolumna, dane, imie, nazwisko)
+
+            cursor.execute(sql)
+            connection.commit()
+    finally:
+        connection.close()
+
+
+#2.4
+def usun_wizyte(imie,nazwisko,data,godzina):
+    connection = connect()
+    try:
+        with connection.cursor() as cursor:
+            sql = "SELECT ID_wizyty FROM wizyta WHERE id_pacjenta = (SELECT ID_pacjenta FROM pacjent WHERE Imie = '%s' " \
+                  "AND Nazwisko = '%s') AND Data_wizyty = '%s' AND Godzina_wizyty = '%s';" % (imie, nazwisko,data,godzina)
+            cursor.execute(sql)
+            id_wizyty = cursor.fetchone()
+            id_wizyty = int(id_wizyty[0])
+
+            sql = "DELETE FROM Skierowanie WHERE ID_wizyty = '%s'" % (id_wizyty)
+            cursor.execute(sql)
+            sql = "DELETE FROM Recepta WHERE ID_wizyty = '%s'" % (id_wizyty)
+            cursor.execute(sql)
+            sql = "DELETE FROM Wizyta WHERE ID_wizyty = '%s'" % (id_wizyty)
+            cursor.execute(sql)
+
+            connection.commit()
+
+    finally:
+        connection.close()
+
+
+#2.5
+def wpisz_urlop(imie,nazwisko):
+    connection = connect()
+    try:
+        with connection.cursor() as cursor:
+            sql = "UPDATE Lekarz SET Lekarz.urlop = 1 WHERE (SELECT ID_pracownika from Pracownik WHERE Pracownik.Imie " \
+                  "= '%s' AND Pracownik.Nazwisko = '%s') = ID_pracownika;" % (imie,nazwisko)
+            cursor.execute(sql)
+            connection.commit()
+
+    finally:
+        connection.close()
+
+#2.6
+def dodaj_skierowanie(imie,nazwisko,data,godzina):
+    connection = connect()
+    try:
+        with connection.cursor() as cursor:
+            sql = "SELECT ID_wizyty FROM wizyta WHERE id_pacjenta = (SELECT ID_pacjenta FROM pacjent WHERE Imie = '%s' " \
+                  "AND Nazwisko = '%s') AND Data_wizyty = '%s' AND Godzina_wizyty = '%s';" % (
+                  imie, nazwisko, data, godzina)
+            cursor.execute(sql)
+            id_wizyty = cursor.fetchone()
+            id_wizyty = int(id_wizyty[0])
+
+            sql = "SELECT COUNT(*) FROM Skierowanie;"
+            cursor.execute(sql)
+            id_skierowania = cursor.fetchone()
+            id_skierowania = int(id_skierowania[0]) + 1
+
+            do_kogo = input('Podaj typ skierowania: ')
+
+            sql = "INSERT INTO `skierowanie` (`ID_skierowania`, `ID_wizyty`, `Typ`)" \
+              "VALUES(%s, %s, '%s');" % (id_skierowania, id_wizyty, do_kogo)
+            cursor.execute(sql)
+            connection.commit()
+
+    finally:
+        connection.close()
+
+
+
+#2.7
+def dodaj_recepte(imie, nazwisko, data, godzina):
+    connection = connect()
+    try:
+        with connection.cursor() as cursor:
+            sql = "SELECT ID_wizyty FROM wizyta WHERE id_pacjenta = (SELECT ID_pacjenta FROM pacjent WHERE Imie = '%s' " \
+                  "AND Nazwisko = '%s') AND Data_wizyty = '%s' AND Godzina_wizyty = '%s';" % (
+                  imie, nazwisko, data, godzina)
+            cursor.execute(sql)
+            id_wizyty = cursor.fetchone()
+            id_wizyty = int(id_wizyty[0])
+
+            sql = "SELECT COUNT(*) FROM Recepta;"
+            cursor.execute(sql)
+            id_recepty = cursor.fetchone()
+            id_recepty = int(id_recepty[0]) + 1
+            print(id_recepty)
+
+            lekarstwo = input('Podaj jakie lekarstwo przepisać: ')
+            sposob_uzycia = input('Podaj sposób użycia leku: ')
+
+            sql = "INSERT INTO `recepta` (`ID_recepty`, `Nazwa_lekarstwa`, `Sposob_podania`, `ID_wizyty`)" \
+                  "VALUES(%s, '%s', '%s', %s);" % (id_recepty, lekarstwo, sposob_uzycia, id_wizyty)
+            cursor.execute(sql)
+            connection.commit()
+
+    finally:
+        connection.close()
+
+
+#2.8
+def zmien_ubezpieczenie(imie,nazwisko):
+    connection = connect()
+    try:
+        with connection.cursor() as cursor:
+            sql = "SELECT Ubezpieczenie FROM Pacjent WHERE Imie = '%s' AND Nazwisko = '%s'" % (imie, nazwisko)
+            cursor.execute(sql)
+            ubezpieczenie = cursor.fetchone()
+            ubezpieczenie = int(ubezpieczenie[0])
+
+            if ubezpieczenie == 0:
+                sql = "UPDATE Pacjent SET Ubezpieczenie = 1 WHERE Imie = '%s' AND Nazwisko = '%s'" % (imie, nazwisko)
+            else:
+                sql = "UPDATE Pacjent SET Ubezpieczenie = 0 WHERE Imie = '%s' AND Nazwisko = '%s'" % (imie, nazwisko)
+
+            cursor.execute(sql)
+            connection.commit()
 
     finally:
         connection.close()
