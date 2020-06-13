@@ -102,7 +102,9 @@ if wybor == 1:
         print('1. Wszystkie')
         print('2. W danym dniu danego lekarza')
         print('3. W danym gabinecie')
-        wybor = int(input('Wybierz opcję 1 lub 2: '))
+        print('4. Ilość wizyt pomiędzy podanymi datami')
+        print('5. Ilość wizyt w miesiącu')
+        wybor = int(input('Wybierz opcję: '))
         if wybor == 1:
             functions.wyswietl_wizyty()
         elif wybor == 2:
@@ -110,9 +112,16 @@ if wybor == 1:
             nazwisko_lekarza = input('Podaj nazwisko lekarza: ')
             dzien = input('Podaj dzień w formacie RRRR-MM-DD: ')
             functions.wizyty_lekarza_w_dniu(imie_lekarza, nazwisko_lekarza, dzien)
-        else:
+        elif wybor == 3:
             nr_gabinetu = input('Podaj numer gabinetu: ')
             functions.wizyty_gabinet(nr_gabinetu)
+        elif wybor == 4:
+            data1 = input('Podaj datę początkową: ')
+            data2 = input('Podaj datę końcową: ')
+            functions.ilosc_wizyt(data1, data2)
+        elif wybor == 5:
+            data = input('Podaj miesiąc w którym chcesz policzyć ilość wizyt (RRRR-MM): ')
+            functions.ilosc_wizyt_miesiac(data)
   
             
     #Wyświetl historię wizyt pacjenta

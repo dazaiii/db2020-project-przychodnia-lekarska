@@ -183,6 +183,40 @@ def wizyty_gabinet(nr_gabinetu):
         connection.close()
 
 
+#1.5
+def ilosc_wizyt(data1, data2):
+    connection = connect()
+    try:
+        with connection.cursor() as cursor:
+            sql = "SELECT Data_wizyty, COUNT(Data_wizyty) AS ‘Ilość’ FROM wizyta  " \
+                  "WHERE Data_wizyty BETWEEN '%s' AND '%s' " \
+                  "GROUP BY Data_wizyty ORDER BY Data_wizyty ASC;" % (data1, data2)
+            cursor.execute(sql)
+            rows = cursor.fetchall()
+            for row in rows:
+                print(row[0], row[1])
+
+    finally:
+        connection.close()
+
+
+#1.5
+def ilosc_wizyt_miesiac(data):
+    connection = connect()
+    try:
+        with connection.cursor() as cursor:
+            sql = "SELECT Data_wizyty, COUNT(Data_wizyty) AS ‘Ilość’ FROM wizyta  " \
+                  "WHERE Data_wizyty LIKE '%s%s'" \
+                  "GROUP BY Data_wizyty ORDER BY Data_wizyty ASC;" % (data,'%')
+            cursor.execute(sql)
+            rows = cursor.fetchall()
+            for row in rows:
+                print(row[0], row[1])
+
+    finally:
+        connection.close()
+
+
 #1.6
 def historia_wizyt(imie,nazwisko):
     connection = connect()
@@ -379,8 +413,7 @@ def zlicz_lekarzy_specjalizacji(specjalizacja):
             sql = "SELECT Lekarz.Specjalizacja, COUNT(Lekarz.Specjalizacja) AS 'Ilość' " \
                   "FROM Lekarz " \
                   "WHERE Lekarz.Specjalizacja = '%s'" \
-                  "GROUP BY Lekarz.Specjalizacja " \
-                  "ORDER BY Lekarz.Specjalizacja ASC;" % (specjalizacja)
+                  "GROUP BY Lekarz.Specjalizacja;" % (specjalizacja)
 
             cursor.execute(sql)
             rows = cursor.fetchall()
