@@ -3,7 +3,7 @@
 SELECT `pacjent`.`Imie`, `pacjent`.`Nazwisko`, `wizyta`.`ID_pacjenta`,
 `recepta`.`Nazwa_lekarstwa`, `recepta`.`Sposob_podania`
 FROM `pacjent`  LEFT JOIN `wizyta` ON `wizyta`.`ID_pacjenta` = `pacjent`.`ID_pacjenta`
-LEFT JOIN `recepta` ON `recepta`.`ID_wizyty` = `wizyta`.`ID_wizyty`
+INNER JOIN `recepta` ON `recepta`.`ID_wizyty` = `wizyta`.`ID_wizyty`
 WHERE `pacjent`.`Imie` = '%s' AND `pacjent`.`Nazwisko` = '%s';
 
 /* 1.2 Wypisz lekarzy na urlopie/nie na urlopie */
@@ -44,18 +44,25 @@ FROM pracownik  INNER JOIN wizyta ON wizyta.ID_pracownika = pracownik.ID_pracown
 WHERE pracownik.Imie = '%s' AND pracownik.Nazwisko = '%s' AND wizyta.Data_wizyty = '%s'
 ORDER BY wizyta.Godzina_wizyty ASC;
 
-SELECT gabinet.Nr_gabinetu, gabinet.Pietro, wizyta.ID_wizyty, pacjent.Imie, pacjent.Nazwisko
-FROM gabinet
-LEFT JOIN wizyta ON wizyta.ID_gabinetu = gabinet.ID_gabinetu
-LEFT JOIN pacjent ON wizyta.ID_pacjenta = pacjent.ID_pacjenta WHERE gabinet.Nr_gabinetu = '%s';
+SELECT `pracownik`.`Imie`, `pracownik`.`Nazwisko`, `lekarz`.`Specjalizacja`, `wizyta`.`Data_wizyty`, `wizyta`.`Godzina_wizyty`, `pacjent`.`Imie`, `pacjent`.`Nazwisko`
+FROM `pracownik`
+LEFT JOIN `lekarz` ON `lekarz`.`ID_pracownika` = `pracownik`.`ID_pracownika`
+LEFT JOIN `wizyta` ON `wizyta`.`ID_pracownika` = `pracownik`.`ID_pracownika`
+LEFT JOIN `gabinet` ON `wizyta`.`ID_gabinetu` = `gabinet`.`ID_gabinetu`
+LEFT JOIN `pacjent` ON `wizyta`.`ID_pacjenta` = `pacjent`.`ID_pacjenta`
+WHERE `gabinet`.`Nr_gabinetu` = '11';
 
 SELECT Data_wizyty, COUNT(Data_wizyty) AS ‘Ilość’ FROM wizyta
 WHERE Data_wizyty BETWEEN '%s' AND '%s'
 GROUP BY Data_wizyty ORDER BY Data_wizyty ASC;
 
+SELECT COUNT(*) FROM wizyta WHERE Data_wizyty BETWEEN '%s' AND '%s';
+
 SELECT Data_wizyty, COUNT(Data_wizyty) AS ‘Ilość’ FROM wizyta
 WHERE Data_wizyty LIKE '%s%s'
 GROUP BY Data_wizyty ORDER BY Data_wizyty ASC;
+
+SELECT COUNT(*) FROM wizyta WHERE Data_wizyty LIKE '%s%s';
 
 /* 1.6 Wyświetl historię wizyt pacjenta */
 
@@ -120,7 +127,7 @@ FROM Pracownik
 GROUP BY Pracownik.Funkcja
 ORDER BY Pracownik.Funkcja ASC;
 
-/* 1.13 */
+/* 1.13 Zlicz lekarzy danej specjalizacji */
 
 SELECT Lekarz.Specjalizacja, COUNT(Lekarz.Specjalizacja) AS 'Ilość'
 FROM Lekarz
@@ -198,10 +205,10 @@ SELECT COUNT(*) FROM Recepta;
 INSERT INTO `recepta` (`ID_recepty`, `Nazwa_lekarstwa`, `Sposob_podania`, `ID_wizyty`)
 VALUES(%s, '%s', '%s', %s);
 
-/* 2.8 Zmień ubezpieczenie */
+/* 2.8 Modyfikuj ubezpieczenie */
 
-SELECT Ubezpieczenie FROM Pacjent WHERE Imie = '%s' AND Nazwisko = '%s'
+SELECT Ubezpieczenie FROM Pacjent WHERE Imie = '%s' AND Nazwisko = '%s';
 
-UPDATE Pacjent SET Ubezpieczenie = 1 WHERE Imie = '%s' AND Nazwisko = '%s'
+UPDATE Pacjent SET Ubezpieczenie = 1 WHERE Imie = '%s' AND Nazwisko = '%s';
 
-UPDATE Pacjent SET Ubezpieczenie = 0 WHERE Imie = '%s' AND Nazwisko = '%s'
+UPDATE Pacjent SET Ubezpieczenie = 0 WHERE Imie = '%s' AND Nazwisko = '%s';
