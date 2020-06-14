@@ -20,7 +20,7 @@ Połączenie tabel odpowiednimi relacjami pozwoliło na łączenie różnych zap
   
 Schemat bazy danych:
   
-![Przychodnia]("Przychodnia lekarska.svg")
+![Przychodnia](https://github.com/phajder-databases/db2020-project-przychodnia-lekarska/blob/master/resources/Przychodnia%20lekarska.svg)
   
 Przykładowe zapytania tworzące:
   
@@ -342,13 +342,19 @@ ORDER BY Pracownik.Funkcja ASC;
   
     
 ## Aplikacja
-Aplikacja oparta jest o menu wyboru podzielone na dwie sekcje - sekcję sprawdzania danych i sekcję zarządzania danymi. Z poziomu menu możliwe jest także zamknięcie aplikacji. Z poszczególnych sekcji istnieje możliwość wybrania konkretnych funkcjonalności oraz cofnięcie się do menu wyboru sekcji. "Sekcja sprawdzania danych" polega na wypisywaniu danych zawartych w bazie przychodnii lekarskiej. Pozwala między innymi na wypisywanie informacji dotyczących wizyt, lekarzy i pacjentów, pozwala na przeglądanie wypisanych recept i skierowań. "Sekcja zarządzania danymi" pozwala na robienie zmian w bazie poprzez aktualizacje czy dodawanie nowych danych do tabel. Ta sekcja pozwala między innymi na dodawanie wizyt, recept i skierowań, dodawanie urlopu lekarzowi lub pozwala na usuwanie wizyt z bazy. Obsługa aplikacji odbywa się z poziomu terminala. Aplikacja jest interaktywna z użytkownikiem i pozwala na wpisywanie potrzebnych danych przez użytkownika. Istnieje łatwa możliwość rozbudowania aplikacji o nowe funkcjonalności.
+Aplikacja oparta jest o menu wyboru podzielone na dwie sekcje - sekcję sprawdzania danych i sekcję zarządzania danymi. Z poziomu menu możliwe jest także zamknięcie aplikacji. W poszczególnych sekcjach istnieje możliwość wybrania konkretnych funkcjonalności oraz cofnięcie się do menu wyboru sekcji. 
+  
+"Sekcja sprawdzania danych" polega na wypisywaniu danych zawartych w bazie przychodni lekarskiej. Pozwala między innymi na wypisywanie informacji dotyczących wizyt, lekarzy i pacjentów, pozwala na przeglądanie wypisanych recept i skierowań. 
+  
+"Sekcja zarządzania danymi" pozwala na robienie zmian w bazie poprzez aktualizacje czy dodawanie nowych danych do tabel. Ta sekcja pozwala między innymi na dodawanie wizyt, recept i skierowań, dodawanie urlopu lekarzowi lub pozwala na usuwanie wizyt z bazy. 
+  
+Obsługa aplikacji odbywa się z poziomu terminala. Aplikacja jest interaktywna z użytkownikiem i pozwala na wpisywanie potrzebnych danych przez użytkownika. Istnieje łatwa możliwość rozbudowania aplikacji o nowe funkcjonalności.
   
     
-Przykładowa implementacja niektórzych funkcjonalności:
+Przykładowa implementacja niektórych funkcjonalności:
   
 1. Dodawanie skierowania pacjentowi 
-```sql
+```py
 def dodaj_skierowanie(imie,nazwisko,data,godzina):
     connection = connect()
     try:
@@ -379,7 +385,7 @@ Funkcja wymaga podania przez użytkownika imienia i nazwiska pacjenta oraz daty 
   
     
 2. Sprawdzenie wizyt lekarza w danym dniu
-```sql
+```py
 def wizyty_lekarza_w_dniu(imie_lekarza, nazwisko_lekarza, dzien):
     connection = connect()
     try:
