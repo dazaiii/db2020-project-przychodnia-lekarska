@@ -160,6 +160,9 @@ INSERT INTO `pracownik` (`ID_pracownika`, `Imie`, `Nazwisko`, `Data_urodzenia`, 
 `Miejsce_zamieszkania`, `Telefon`, `Mail`, `Funkcja`)
 VALUES (%s, '%s', '%s', '%s', '%s', '%s', %s, '%s', '%s');
 
+INSERT INTO `lekarz` (`ID_pracownika`, `Specjalizacja`, `Staz_pracy`, `Etat`, `Urlop`)
+VALUES(%s, '%s', %s, '%s', 0);
+
 /* 2.3 Modyfikuj dane kontaktowe */
 
 UPDATE %s SET %s = '%s' WHERE Imie = '%s' AND Nazwisko = '%s';
