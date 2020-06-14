@@ -1,10 +1,3 @@
-
-SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
-START TRANSACTION;
-SET time_zone = "+00:00";
-
-
-
 --
 -- Baza danych: `przychodniadb`
 --
@@ -26,7 +19,7 @@ CREATE TABLE `gabinet` (
   `Godzina_rozpoczecia` time NOT NULL,
   `Godzina_zakonczenia` time NOT NULL,
   `ID_pracownika` int(10) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_polish_ci;
+);
 
 
 
@@ -79,7 +72,7 @@ CREATE TABLE `lekarz` (
   `Staz_pracy` int(10) NOT NULL,
   `Etat` varchar(50) COLLATE utf8_polish_ci NOT NULL,
   `Urlop` int(1) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_polish_ci;
+);
 
 
 
@@ -132,7 +125,7 @@ CREATE TABLE `pacjent` (
   `Telefon` int(10) NOT NULL,
   `Mail` varchar(50) COLLATE utf8_polish_ci NOT NULL,
   `Ubezpieczenie` int(1) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_polish_ci;
+);
 
 
 
@@ -239,7 +232,7 @@ CREATE TABLE `pracownik` (
   `Telefon` int(10) NOT NULL,
   `Mail` varchar(50) COLLATE utf8_polish_ci NOT NULL,
   `Funkcja` varchar(50) COLLATE utf8_polish_ci NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_polish_ci;
+);
 
 
 
@@ -301,7 +294,7 @@ CREATE TABLE `recepta` (
   `Nazwa_lekarstwa` varchar(50) COLLATE utf8_polish_ci NOT NULL,
   `Sposob_podania` varchar(50) COLLATE utf8_polish_ci NOT NULL,
   `ID_wizyty` int(10) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_polish_ci;
+);
 
 
 
@@ -362,7 +355,7 @@ CREATE TABLE `skierowanie` (
   `ID_skierowania` int(10) NOT NULL,
   `ID_wizyty` int(10) NOT NULL,
   `Typ` varchar(50) COLLATE utf8_polish_ci NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_polish_ci;
+);
 
 
 
@@ -411,7 +404,7 @@ CREATE TABLE `wizyta` (
   `ID_gabinetu` int(10) NOT NULL,
   `Data_wizyty` date NOT NULL,
   `Godzina_wizyty` time NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_polish_ci;
+);
 
 
 
@@ -609,7 +602,6 @@ ALTER TABLE `wizyta`
   ADD CONSTRAINT `wizyta_ibfk_1` FOREIGN KEY (`ID_pacjenta`) REFERENCES `pacjent` (`ID_pacjenta`),
   ADD CONSTRAINT `wizyta_ibfk_2` FOREIGN KEY (`ID_gabinetu`) REFERENCES `gabinet` (`ID_gabinetu`),
   ADD CONSTRAINT `wizyta_ibfk_3` FOREIGN KEY (`ID_pracownika`) REFERENCES `pracownik` (`ID_pracownika`);
-COMMIT;
 
 
 
