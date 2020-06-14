@@ -552,6 +552,20 @@ def dodaj_pracownika(id_pracownika,imie,nazwisko,data_urodzenia,pesel,miejsce_za
     finally:
         connection.close()
 
+
+#2.2
+def dodaj_lekarza(id_pracownika,specjalizacja,staz,etat):
+    connection = connect()
+    try:
+        with connection.cursor() as cursor:
+            sql = "INSERT INTO `lekarz` (`ID_pracownika`, `Specjalizacja`, `Staz_pracy`, `Etat`, `Urlop`)" \
+                  " VALUES(%s, '%s', %s, '%s', 0);" % (id_pracownika,specjalizacja,staz,etat)
+
+            cursor.execute(sql)
+            connection.commit()
+    finally:
+        connection.close()
+
 #2.3
 def modyfikuj_dane_kontaktowe(tabela,imie,nazwisko,kolumna,dane):
     connection = connect()
