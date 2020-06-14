@@ -219,10 +219,10 @@ while 1:
             print('5. Wpisz lekarzowi urlop')
             print('6. Dodaj skierowanie')
             print('7. Dodaj receptę')
+            print('8. Modyfikuj ubezpieczenie')
             print('0. Cofnij się do menu głównego')
 
             opcja = int(input('Wybierz opcje: '))
-            print(opcja)
 
             if opcja == 0:
                 break
@@ -234,13 +234,13 @@ while 1:
                 czy_ma_ubezpieczenie = functions.ubezpieczenie(imie, nazwisko)
                 print(czy_ma_ubezpieczenie)
                 if czy_ma_ubezpieczenie[0] == 1:
-                    print('Pacjent ma ubezpieczenie można go zarejestrować podaj dane lekarza.')
+                    print('Pacjent ma ubezpieczenie można go zarejestrować. Podaj dane lekarza.')
                     imie_lekarza = input('Podaj imię lekarza: ')
                     nazwisko_lekarza = input('Podaj nazwisko lekarza: ')
                     czy_na_urlopie = functions.urlop(imie_lekarza, nazwisko_lekarza)
                     if czy_na_urlopie[0] == 0:
                         print('Można zarejestrować pacjenta podaj datę')
-                        godzina = str(input('Podaj godzinę w formaci (HH:MM:SS): '))
+                        godzina = str(input('Podaj godzinę w formacie (HH:MM:SS): '))
                         data = str(input('Podaj datę w formacie (YYYY-MM-DD): '))
                         dostepnosc_gabinetu = functions.dostepnosc_gabinetu(int(czy_na_urlopie[1]), godzina, data)
                         if dostepnosc_gabinetu == 0:
@@ -265,17 +265,17 @@ while 1:
 
                 imie = input('Podaj imię: ')
                 nazwisko = input('Podaj nazwisko: ')
+                data_urodzenia = input('Podaj datę urodzenia w formacie RRRR-MM-DD: ')
                 pesel = input('Podaj pesel: ')
+                miejsce_zamieszkania = input('Podaj miejsce zamieszkania: ')
                 telefon = input('Podaj telefon: ')
                 mail = input('Podaj mail: ')
-                miejsce_zamieszkania = input('Podaj miejsce zamieszkania: ')
-                data_urodzenia = input('Podaj datę urodzenia w formacie RRRR-MM-DD: ')
+
 
                 if wybor == 1:
                     id_pacjenta = functions.id_osoby('Pacjent')
-                    print(id_pacjenta)
                     ubezpiecznie = str(input('Czy pacjent jest ubezpieczony? Tak/Nie: '))
-                    if ubezpiecznie == 'Tak':
+                    if ubezpiecznie == 'Tak' or 'tak' or 'TAK':
                         functions.dodaj_pacjenta(id_pacjenta,imie, nazwisko, data_urodzenia, pesel, miejsce_zamieszkania, telefon, mail,1)
                     else:
                         functions.dodaj_pacjenta(id_pacjenta,imie, nazwisko, data_urodzenia, pesel, miejsce_zamieszkania, telefon, mail,0)
@@ -290,8 +290,8 @@ while 1:
                     if wybor2 == 1:
                         functions.dodaj_pracownika(id_pracownika,imie,nazwisko,data_urodzenia,pesel,miejsce_zamieszkania,telefon,mail,'Lekarz')
                         specjalizacja = input('Określ specjalizację lekarza: ')
-                        etat = input('Na jaki etat przyjąć lekarza: ')
-                        staz = input('Podaj staż pracy lekarza: ')
+                        etat = input('Na jaki etat przyjąć lekarza (Pełny/Staż): ')
+                        staz = input('Podaj staż pracy lekarza (w latach): ')
                         functions.dodaj_lekarza(id_pracownika,specjalizacja,staz,etat)
                     elif wybor2 == 2:
                         functions.dodaj_pracownika(id_pracownika, imie, nazwisko, data_urodzenia, pesel, miejsce_zamieszkania, telefon, mail, 'Pielęgniarka')
@@ -318,7 +318,7 @@ while 1:
                 print('1. Telefon')
                 print('2. Mail')
                 print('3. Miejsce zamieszkania')
-                wybor2 = int(input('Wybierz opcję 1, 2 lub 3'))
+                wybor2 = int(input('Wybierz opcję 1, 2 lub 3: '))
 
                 if wybor2 == 1:
                     telefon = input('Podaj nowy numer telefonu: ')
@@ -333,7 +333,7 @@ while 1:
 
             #Usuń wizytę z bazy
             elif opcja == 4:
-                imie = input('Podaj imie pacjenta: ')
+                imie = input('Podaj imię pacjenta: ')
                 nazwisko = input('Podaj nazwisko pacjenta: ')
                 data = input('Podaj datę wizyty: ')
                 godzina = input('Podaj godzinę wizyty: ')
@@ -349,7 +349,7 @@ while 1:
 
             #Dodaj skierowanie
             elif opcja == 6:
-                imie = input('Podaj imie pacjenta: ')
+                imie = input('Podaj imię pacjenta: ')
                 nazwisko = input('Podaj nazwisko pacjenta: ')
                 data = input('Podaj datę wizyty: ')
                 godzina = input('Podaj godzinę wizyty: ')
@@ -358,19 +358,19 @@ while 1:
 
             #Dodaj receptę
             elif opcja == 7:
-                imie = input('Podaj imie pacjenta: ')
+                imie = input('Podaj imię pacjenta: ')
                 nazwisko = input('Podaj nazwisko pacjenta: ')
                 data = input('Podaj datę wizyty: ')
                 godzina = input('Podaj godzinę wizyty: ')
                 functions.dodaj_recepte(imie,nazwisko,data,godzina)
 
 
-            #Dodaj ubezpieczenie
+            #Modyfikuj ubezpieczenie
             elif opcja == 8:
-                imie = input('Podaj imie pacjenta: ')
+                imie = input('Podaj imię pacjenta: ')
                 nazwisko = input('Podaj nazwisko pacjenta: ')
                 functions.zmien_ubezpieczenie(imie,nazwisko)
 
 
-    elif wybor == 'exit':
+    elif wybor == 'exit' or 'EXIT' or 'Exit':
         exit()

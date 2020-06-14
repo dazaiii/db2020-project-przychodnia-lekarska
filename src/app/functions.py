@@ -20,7 +20,7 @@ def recepta(imie, nazwisko):
             sql = "SELECT `pacjent`.`Imie`, `pacjent`.`Nazwisko`, `wizyta`.`ID_pacjenta`, " \
                   "`recepta`.`Nazwa_lekarstwa`, `recepta`.`Sposob_podania` " \
                   "FROM `pacjent`  LEFT JOIN `wizyta` ON `wizyta`.`ID_pacjenta` = `pacjent`.`ID_pacjenta`  " \
-                  "LEFT JOIN `recepta` ON `recepta`.`ID_wizyty` = `wizyta`.`ID_wizyty` " \
+                  "INNER JOIN `recepta` ON `recepta`.`ID_wizyty` = `wizyta`.`ID_wizyty` " \
                   "WHERE `pacjent`.`Imie` = '%s' AND `pacjent`.`Nazwisko` = '%s'" % (imie, nazwisko)
 
             cursor.execute(sql)
@@ -169,15 +169,18 @@ def wizyty_gabinet(nr_gabinetu):
     connection = connect()
     try:
         with connection.cursor() as cursor:
-            sql = "SELECT gabinet.Nr_gabinetu, gabinet.Pietro, wizyta.ID_wizyty, pacjent.Imie, pacjent.Nazwisko " \
-                  "FROM gabinet  " \
-                  "LEFT JOIN wizyta ON wizyta.ID_gabinetu = gabinet.ID_gabinetu  " \
-                  "LEFT JOIN pacjent ON wizyta.ID_pacjenta = pacjent.ID_pacjenta WHERE gabinet.Nr_gabinetu = '%s';" % (nr_gabinetu)
+            sql = "SELECT `pracownik`.`Imie`, `pracownik`.`Nazwisko`, `lekarz`.`Specjalizacja`, `wizyta`.`Data_wizyty`, `wizyta`.`Godzina_wizyty`, `pacjent`.`Imie`, `pacjent`.`Nazwisko`" \
+                  "FROM `pracownik`" \
+                  "LEFT JOIN `lekarz` ON `lekarz`.`ID_pracownika` = `pracownik`.`ID_pracownika` " \
+                  "LEFT JOIN `wizyta` ON `wizyta`.`ID_pracownika` = `pracownik`.`ID_pracownika` " \
+                  "LEFT JOIN `gabinet` ON `wizyta`.`ID_gabinetu` = `gabinet`.`ID_gabinetu` " \
+                  "LEFT JOIN `pacjent` ON `wizyta`.`ID_pacjenta` = `pacjent`.`ID_pacjenta`" \
+                  "WHERE `gabinet`.`Nr_gabinetu` = '%s';" % (nr_gabinetu)
 
             cursor.execute(sql)
             rows = cursor.fetchall()
             for row in rows:
-                print(row[0], row[1], row[2], row[3],row[4])
+                print(row[0], row[1], row[2], row[3],row[4],row[5],row[6])
 
     finally:
         connection.close()
@@ -193,8 +196,15 @@ def ilosc_wizyt(data1, data2):
                   "GROUP BY Data_wizyty ORDER BY Data_wizyty ASC;" % (data1, data2)
             cursor.execute(sql)
             rows = cursor.fetchall()
+
+            sql = "SELECT COUNT(*) FROM wizyta WHERE Data_wizyty BETWEEN '%s' AND '%s';" % (data1, data2)
+            cursor.execute(sql)
+            suma = cursor.fetchone()
+            suma = str(int(suma[0]))
             for row in rows:
                 print(row[0], row[1])
+
+            print('Suma wizyta: ' + suma)
 
     finally:
         connection.close()
@@ -210,8 +220,16 @@ def ilosc_wizyt_miesiac(data):
                   "GROUP BY Data_wizyty ORDER BY Data_wizyty ASC;" % (data,'%')
             cursor.execute(sql)
             rows = cursor.fetchall()
+
+            sql = "SELECT COUNT(*) FROM wizyta WHERE Data_wizyty LIKE '%s%s';" % (data, '%')
+            cursor.execute(sql)
+            suma = cursor.fetchone()
+            suma = str(int(suma[0]))
+
             for row in rows:
                 print(row[0], row[1])
+
+            print('Suma wizyt: ' + suma)
 
     finally:
         connection.close()
@@ -515,7 +533,6 @@ def id_osoby(tabela):
             sql = "SELECT COUNT(*) FROM %s;" % (tabela)
             cursor.execute(sql)
             result = cursor.fetchone()
-            print(result)
             id_os = int(result[0]) + 1
     finally:
         connection.close()
