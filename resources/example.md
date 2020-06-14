@@ -19,6 +19,7 @@ Baza danych składa się z 7 encji:
 Połączenie tabel odpowiednimi relacjami pozwoliło na łączenie różnych zapytań. Dzięki temu stworzono funkcjonalności przydatne w zarządzaniu przychodnią lekarską.
   
 Schemat bazy danych:
+  
 ![Przychodnia]("Przychodnia lekarska.svg")
   
 Przykładowe zapytania tworzące:
@@ -341,7 +342,68 @@ ORDER BY Pracownik.Funkcja ASC;
   
     
 ## Aplikacja
-Tutaj należy opisać aplikację, która wykorzystuje zapytania SQL z poprzedniego kroku. Można, jednak nie jest to konieczne, wrzucić tutaj istotne snippety z Waszych aplikacji.
+Aplikacja oparta jest o menu wyboru podzielone na dwie sekcje - sekcję sprawdzania danych i sekcję zarządzania danymi. Z poziomu menu możliwe jest także zamknięcie aplikacji. Z poszczególnych sekcji istnieje możliwość wybrania konkretnych funkcjonalności oraz cofnięcie się do menu wyboru sekcji. "Sekcja sprawdzania danych" polega na wypisywaniu danych zawartych w bazie przychodnii lekarskiej. Pozwala między innymi na wypisywanie informacji dotyczących wizyt, lekarzy i pacjentów, pozwala na przeglądanie wypisanych recept i skierowań. "Sekcja zarządzania danymi" pozwala na robienie zmian w bazie poprzez aktualizacje czy dodawanie nowych danych do tabel. Ta sekcja pozwala między innymi na dodawanie wizyt, recept i skierowań, dodawanie urlopu lekarzowi lub pozwala na usuwanie wizyt z bazy. Obsługa aplikacji odbywa się z poziomu terminala. Aplikacja jest interaktywna z użytkownikiem i pozwala na wpisywanie potrzebnych danych przez użytkownika. Istnieje łatwa możliwość rozbudowania aplikacji o nowe funkcjonalności.
+  
+    
+Przykładowa implementacja niektórzych funkcjonalności:
+  
+1. Dodawanie skierowania pacjentowi 
+```sql
+def dodaj_skierowanie(imie,nazwisko,data,godzina):
+    connection = connect()
+    try:
+        with connection.cursor() as cursor:
+            sql = "SELECT ID_wizyty FROM wizyta WHERE id_pacjenta = (SELECT ID_pacjenta FROM pacjent WHERE Imie = '%s' " \
+                  "AND Nazwisko = '%s') AND Data_wizyty = '%s' AND Godzina_wizyty = '%s';" % (
+                  imie, nazwisko, data, godzina)
+            cursor.execute(sql)
+            id_wizyty = cursor.fetchone()
+            id_wizyty = int(id_wizyty[0])
+
+            sql = "SELECT COUNT(*) FROM Skierowanie;"
+            cursor.execute(sql)
+            id_skierowania = cursor.fetchone()
+            id_skierowania = int(id_skierowania[0]) + 1
+
+            do_kogo = input('Podaj typ skierowania: ')
+
+            sql = "INSERT INTO skierowanie (ID_skierowania, ID_wizyty, Typ)" \
+              "VALUES(%s, %s, '%s');" % (id_skierowania, id_wizyty, do_kogo)
+            cursor.execute(sql)
+            connection.commit()
+
+    finally:
+        connection.close()
+```
+Funkcja wymaga podania przez użytkownika imienia i nazwiska pacjenta oraz daty i godziny podczas której wystawiono skierowanie. Funkcja sama sprawdza odpowiednie ID wizyty oraz wyznacza nowe ID skierowania. Po podaniu typu skierowania, np. "do kardiologa" lekarz jest w stanie dodać skierowanie do bazy.
+  
+    
+2. Sprawdzenie wizyt lekarza w danym dniu
+```sql
+def wizyty_lekarza_w_dniu(imie_lekarza, nazwisko_lekarza, dzien):
+    connection = connect()
+    try:
+        with connection.cursor() as cursor:
+            sql = "SELECT pracownik.Imie, pracownik.Nazwisko, wizyta.Data_wizyty, wizyta.Godzina_wizyty " \
+                  "FROM pracownik  INNER JOIN wizyta ON wizyta.ID_pracownika = pracownik.ID_pracownika " \
+                  "WHERE pracownik.Imie = '%s' AND pracownik.Nazwisko = '%s' AND wizyta.Data_wizyty = '%s' " \
+                  "ORDER BY wizyta.Godzina_wizyty ASC;" % (imie_lekarza, nazwisko_lekarza, dzien)
+
+            cursor.execute(sql)
+            rows = cursor.fetchall()
+            for row in rows:
+                print(row[0], row[1], row[2], row[3])
+
+    finally:
+        connection.close()
+```
+Funkcja pozwala na sprawdzenie wizyt lekarza w danym dniu po wpisaniu jego imienia i nazwiska oraz żądanego dnia. Wizyty segregowane są godzinami, zatem wyświetlą się w bazie po kolei.
+    
 
 ## Dodatkowe uwagi
-W tej sekcji możecie zawrzeć informacje, których nie jesteście w stanie przypisać do pozostałych. Mogą to być również jakieś komentarze, wolne uwagi, itp.
+W tabeli Lekarz w kolumnie Urlop: 
+- 1 oznacza, że lekarz jest na urlopie
+- 0 oznacza, że lekarz nie jest na urlopie
+W tabeli Pacjent w kolumnie Ubezpieczenie:
+- 1 oznacza, że pacjent posiada ubezpieczenie i może zarejestrować się na wizytę
+- 0 oznacza, że pacjent nie ma ubezpieczenia i nie może zarejestrować się na wizytę
