@@ -404,6 +404,7 @@ Funkcja pozwala na sprawdzenie wizyt lekarza w danym dniu po wpisaniu jego imien
 W tabeli Lekarz w kolumnie Urlop: 
 - 1 oznacza, że lekarz jest na urlopie
 - 0 oznacza, że lekarz nie jest na urlopie
+  
 W tabeli Pacjent w kolumnie Ubezpieczenie:
 - 1 oznacza, że pacjent posiada ubezpieczenie i może zarejestrować się na wizytę
 - 0 oznacza, że pacjent nie ma ubezpieczenia i nie może zarejestrować się na wizytę
