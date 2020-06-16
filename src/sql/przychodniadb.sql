@@ -68,9 +68,9 @@ VALUES(15, 33, 3, '09:00:00', '16:00:00', 16);
 
 CREATE TABLE `lekarz` (
   `ID_pracownika` int(10) NOT NULL,
-  `Specjalizacja` varchar(50) COLLATE utf8_polish_ci NOT NULL,
+  `Specjalizacja` varchar(50) NOT NULL,
   `Staz_pracy` int(10) NOT NULL,
-  `Etat` varchar(50) COLLATE utf8_polish_ci NOT NULL,
+  `Etat` varchar(50) NOT NULL,
   `Urlop` int(1) NOT NULL
 );
 
@@ -117,13 +117,13 @@ VALUES(16, 'Stomatolog', 19, 'pełny', 0);
 
 CREATE TABLE `pacjent` (
   `ID_pacjenta` int(10) NOT NULL,
-  `Imie` varchar(50) COLLATE utf8_polish_ci NOT NULL,
-  `Nazwisko` varchar(50) COLLATE utf8_polish_ci NOT NULL,
+  `Imie` varchar(50) NOT NULL,
+  `Nazwisko` varchar(50) NOT NULL,
   `Data_urodzenia` date NOT NULL,
-  `Pesel` varchar(11) COLLATE utf8_polish_ci NOT NULL,
-  `Miejsce_zamieszkania` varchar(50) COLLATE utf8_polish_ci NOT NULL,
+  `Pesel` varchar(11) NOT NULL,
+  `Miejsce_zamieszkania` varchar(50) NOT NULL,
   `Telefon` int(10) NOT NULL,
-  `Mail` varchar(50) COLLATE utf8_polish_ci NOT NULL,
+  `Mail` varchar(50) NOT NULL,
   `Ubezpieczenie` int(1) NOT NULL
 );
 
@@ -224,14 +224,14 @@ VALUES(40, 'Bronisław', 'Borkowski', '1943-12-28', '43122867564', 'Kraków', 67
 
 CREATE TABLE `pracownik` (
   `ID_pracownika` int(11) NOT NULL,
-  `Imie` varchar(50) COLLATE utf8_polish_ci NOT NULL,
-  `Nazwisko` varchar(50) COLLATE utf8_polish_ci NOT NULL,
+  `Imie` varchar(50) NOT NULL,
+  `Nazwisko` varchar(50) NOT NULL,
   `Data_urodzenia` date NOT NULL,
-  `Pesel` varchar(11) COLLATE utf8_polish_ci NOT NULL,
-  `Miejsce_zamieszkania` varchar(50) COLLATE utf8_polish_ci NOT NULL,
+  `Pesel` varchar(11) NOT NULL,
+  `Miejsce_zamieszkania` varchar(50) NOT NULL,
   `Telefon` int(10) NOT NULL,
-  `Mail` varchar(50) COLLATE utf8_polish_ci NOT NULL,
-  `Funkcja` varchar(50) COLLATE utf8_polish_ci NOT NULL
+  `Mail` varchar(50) NOT NULL,
+  `Funkcja` varchar(50) NOT NULL
 );
 
 
@@ -291,8 +291,8 @@ VALUES(20, 'Renata', 'Sowa', '1965-09-10', '65091087654', 'Tarnów', 748398769, 
 
 CREATE TABLE `recepta` (
   `ID_recepty` int(10) NOT NULL,
-  `Nazwa_lekarstwa` varchar(50) COLLATE utf8_polish_ci NOT NULL,
-  `Sposob_podania` varchar(50) COLLATE utf8_polish_ci NOT NULL,
+  `Nazwa_lekarstwa` varchar(50) NOT NULL,
+  `Sposob_podania` varchar(50) NOT NULL,
   `ID_wizyty` int(10) NOT NULL
 );
 
@@ -354,7 +354,7 @@ VALUES(20, 'Etopiryna', 'Doustnie', 11);
 CREATE TABLE `skierowanie` (
   `ID_skierowania` int(10) NOT NULL,
   `ID_wizyty` int(10) NOT NULL,
-  `Typ` varchar(50) COLLATE utf8_polish_ci NOT NULL
+  `Typ` varchar(50) NOT NULL
 );
 
 
@@ -398,7 +398,7 @@ VALUES(12, 20, 'Do neurologa');
 
 CREATE TABLE `wizyta` (
   `ID_wizyty` int(10) NOT NULL,
-  `Typ` varchar(50) COLLATE utf8_polish_ci NOT NULL,
+  `Typ` varchar(50) NOT NULL,
   `ID_pracownika` int(10) NOT NULL,
   `ID_pacjenta` int(10) NOT NULL,
   `ID_gabinetu` int(10) NOT NULL,
