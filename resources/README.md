@@ -20,7 +20,7 @@ Połączenie tabel odpowiednimi relacjami pozwoliło na łączenie różnych zap
   
 Schemat bazy danych:
   
-![Przychodnia](https://github.com/phajder-databases/db2020-project-przychodnia-lekarska/blob/master/resources/Przychodnia%20lekarska.svg)
+![Przychodnia](https://github.com/dazaiii/db2020-project-przychodnia-lekarska/blob/master/resources/Przychodnia%20lekarska.svg)
   
 Przykładowe zapytania tworzące:
   
